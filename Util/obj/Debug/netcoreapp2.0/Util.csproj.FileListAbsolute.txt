@@ -1,9 +1,0 @@
-C:\Users\kevin\source\repos\Glory\Util\bin\Debug\netcoreapp2.0\Util.deps.json
-C:\Users\kevin\source\repos\Glory\Util\bin\Debug\netcoreapp2.0\Util.dll
-C:\Users\kevin\source\repos\Glory\Util\bin\Debug\netcoreapp2.0\Util.pdb
-C:\Users\kevin\source\repos\Glory\Util\obj\Debug\netcoreapp2.0\Util.csprojAssemblyReference.cache
-C:\Users\kevin\source\repos\Glory\Util\obj\Debug\netcoreapp2.0\Util.csproj.CoreCompileInputs.cache
-C:\Users\kevin\source\repos\Glory\Util\obj\Debug\netcoreapp2.0\Util.AssemblyInfoInputs.cache
-C:\Users\kevin\source\repos\Glory\Util\obj\Debug\netcoreapp2.0\Util.AssemblyInfo.cs
-C:\Users\kevin\source\repos\Glory\Util\obj\Debug\netcoreapp2.0\Util.dll
-C:\Users\kevin\source\repos\Glory\Util\obj\Debug\netcoreapp2.0\Util.pdb

@@ -1,6 +1,0 @@
-C:\Users\kevin\source\repos\Glory\Utilities\bin\Debug\Utilities.dll
-C:\Users\kevin\source\repos\Glory\Utilities\bin\Debug\Utilities.pdb
-C:\Users\kevin\source\repos\Glory\Utilities\obj\Debug\Utilities.csprojAssemblyReference.cache
-C:\Users\kevin\source\repos\Glory\Utilities\obj\Debug\Utilities.csproj.CoreCompileInputs.cache
-C:\Users\kevin\source\repos\Glory\Utilities\obj\Debug\Utilities.dll
-C:\Users\kevin\source\repos\Glory\Utilities\obj\Debug\Utilities.pdb
