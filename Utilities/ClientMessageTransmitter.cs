@@ -7,6 +7,7 @@ namespace Utilities
 {
     public class ClientMessageTransmitter : SocketMessageTransmitter
     {
+        private Socket _socket;
         private TaskCompletionSource<bool> _waitForReady;
         protected override Socket CommunicationSocket { get; set; }
         public override Task WaitForReady => _waitForReady.Task;
@@ -16,12 +17,12 @@ namespace Utilities
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
             IPAddress ipAddress = ipHostInfo.AddressList[0];
             IPEndPoint remoteEP = new IPEndPoint(ipAddress, 11000);
-            Socket socket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            _socket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             _waitForReady = new TaskCompletionSource<bool>();
 
             try
             {
-                socket.BeginConnect(remoteEP, new AsyncCallback(ConnectCallback), socket);
+                _socket.BeginConnect(remoteEP, new AsyncCallback(ConnectCallback), _socket);
             }
             catch (Exception e)
             {

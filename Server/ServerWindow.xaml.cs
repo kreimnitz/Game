@@ -16,34 +16,41 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Timers;
+using System.Threading;
 
 namespace Server
 {
     /// <summary>
     /// Interaction logic for ServerWindow.xaml
     /// </summary>
-    public partial class ServerWindow : Window, INotifyPropertyChanged, IMessageReceivedHandler
+    public partial class ServerWindow : Window, IAutoNotifyPropertyChanged, IMessageReceivedHandler
     {
+        private int _goldIncome = 100;
         private SocketMessageTransmitter _messageTransmitter;
+        private System.Timers.Timer _gameLoopTimer;
 
-        private string _displayText = "None";
-        public string DisplayText
+        private int _goldCount = 0;
+        public int GoldCount
         {
-            get { return _displayText; }
-            set
-            {
-                if (value != _displayText)
-                {
-                    _displayText = value;
-                    OnPropertyChanged(nameof(DisplayText));
-                }
-            }
+            get { return _goldCount; }
         }
 
-            
+        private int _goldMax = 1000;
+        public int GoldMax
+        {
+            get { return _goldMax; }
+        }
+
+        private int _goldMaxUpgradeCost = 500;
+        public int GoldMaxUpgradeCost
+        {
+            get { return _goldMaxUpgradeCost; }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(string propertyName)
+        public void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -52,19 +59,58 @@ namespace Server
         {
             DataContext = this;
             InitializeComponent();
+            _messageTransmitter = new ServerMessageTransmitter(this);
             var gloryWindow = new Glory.MainWindow();
             gloryWindow.Show();
-            _messageTransmitter = new ServerMessageTransmitter(this);
+            var ignoredTask = WaitForClientAndStartGameAsync();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            _gameLoopTimer.Stop();
+            _messageTransmitter.CloseConnection();
+            base.OnClosed(e);
+        }
+
+        private async Task WaitForClientAndStartGameAsync()
+        {
+            await _messageTransmitter.WaitForReady;
+            _gameLoopTimer = new System.Timers.Timer(1000);
+            _gameLoopTimer.Elapsed += GameLoop;
+            _gameLoopTimer.AutoReset = true;
+            _gameLoopTimer.Enabled = true;
+            _gameLoopTimer.Start();
+        }
+
+        private void GameLoop(object source, ElapsedEventArgs e)
+        {
+            if (_goldMax >= _goldCount + _goldIncome)
+            {
+                Interlocked.Add(ref _goldCount, _goldIncome);
+                RaisePropertyChanged(nameof(GoldCount));
+
+                _messageTransmitter.SendStateMessage(new State(_goldCount, _goldMax, _goldMaxUpgradeCost));
+            }
         }
 
         public void HandleStateMessage(State state, object sender)
         {
-            DisplayText = state.Text;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public void HandleRequestMessage(Request request, object sender)
         {
-            _messageTransmitter.SendStateMessage(new State(DisplayText));
+            if (request == Request.UpgradeGoldMax)
+            {
+                if (_goldCount >= _goldMaxUpgradeCost)
+                {
+                    Interlocked.Add(ref _goldCount, -_goldMaxUpgradeCost);
+                    Interlocked.Add(ref _goldMaxUpgradeCost, _goldMaxUpgradeCost);
+                    Interlocked.Add(ref _goldMax, _goldMax);
+                    RaisePropertyChanged(nameof(GoldCount));
+                    RaisePropertyChanged(nameof(GoldMax));
+                    RaisePropertyChanged(nameof(GoldMaxUpgradeCost));
+                }
+            }
         }
     }  
 }

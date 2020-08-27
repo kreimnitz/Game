@@ -25,6 +25,11 @@ namespace Utilities
                     var state = State.FromByteArray(message.Data);
                     Handler.HandleStateMessage(state, this);
                 }
+                if (message.MessageType == MessageType.Request)
+                {
+                    var request = RequestUtilities.FromByteArray(message.Data);
+                    Handler.HandleRequestMessage(request, this);
+                }
             }
 
             await Task.Delay(1);
@@ -36,8 +41,15 @@ namespace Utilities
             Message.SendMessage(message, CommunicationSocket);
         }
 
-        public void StopListening()
+        public void SendRequestMessage(Request request)
         {
+            var message = new Message(MessageType.Request, RequestUtilities.ToByteArray(request));
+            Message.SendMessage(message, CommunicationSocket);
+        }
+
+        public virtual void CloseConnection()
+        {
+            CommunicationSocket.Close();
             _runReceiver = false;
         }
     }

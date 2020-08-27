@@ -7,11 +7,16 @@ namespace Utilities
     [Serializable]
     public class State
     {
-        public string Text { get; set; }
+        public int Gold { get; set; }
+        public int GoldMax { get; set; }
 
-        public State(string text)
+        public int GoldMaxUpgradeCost { get; set; }
+
+        public State(int gold, int goldMax, int goldMaxUpgradeCost)
         {
-            Text = text;
+            Gold = gold;
+            GoldMax = goldMax;
+            GoldMaxUpgradeCost = goldMaxUpgradeCost;
         }
 
         public byte[] ToByteArray()

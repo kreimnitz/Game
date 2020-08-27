@@ -8,8 +8,12 @@ namespace Utilities
     public class ServerMessageTransmitter : SocketMessageTransmitter
     {
         private TaskCompletionSource<bool> _waitForReady;
+
         protected override Socket CommunicationSocket { get; set; }
+
         public override Task WaitForReady => _waitForReady.Task;
+
+        public bool Connected => _waitForReady.Task.IsCompleted;
 
         public ServerMessageTransmitter(IMessageReceivedHandler handler) : base(handler)
         {

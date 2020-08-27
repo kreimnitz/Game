@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NotifyHelpers.cs" />
     <Compile Include="ClientMessageTransmitter.cs" />
     <Compile Include="IMessageReceivedHandler.cs" />
     <Compile Include="Message.cs" />

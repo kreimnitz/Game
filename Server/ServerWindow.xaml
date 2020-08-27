@@ -6,10 +6,23 @@
         xmlns:local="clr-namespace:Server"
         mc:Ignorable="d"
         Title="ServerWindow" Height="450" Width="800">
-    <Grid>
-        <StackPanel HorizontalAlignment="Left">
-            <TextBox Text="{Binding DisplayText, Mode=TwoWay}"></TextBox>
-            <Button Width="50" Click="Button_Click">Send Text</Button>
+    <Grid Margin="0,0,2,1"
+          Background="DarkGray">
+        <StackPanel Margin="10, 10, 0, 0" HorizontalAlignment="Left">
+            <TextBlock>Player Resources:</TextBlock>
+            <TextBlock Foreground="Black" HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                <Run>Gold: </Run>
+                <Run Text="{Binding Path=GoldCount, Mode=OneWay}"></Run>
+            </TextBlock>
+            <TextBlock Foreground="Black" HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                <Run>Gold Max: </Run>
+                <Run Text="{Binding Path=GoldMax, Mode=OneWay}"></Run>
+            </TextBlock>
+            <TextBlock Foreground="Black" HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                <Run>Gold Max Upgrade Cost: </Run>
+                <Run Text="{Binding Path=GoldMaxUpgradeCost, Mode=OneWay}"></Run>
+            </TextBlock>
         </StackPanel>
+
     </Grid>
 </Window>

@@ -8,17 +8,26 @@
         Title="Minimalist RTS" Height="450" Width="800">
     <Grid Margin="0,0,2,1"
           Background="DarkGray">
-        <StackPanel Margin="10, 10, 0, 0">
+        <StackPanel Margin="10, 10, 0, 0" HorizontalAlignment="Left">
             <TextBlock>Resources:</TextBlock>
             <TextBlock Foreground="Black" HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
-                <Run>Glory: </Run>
-                <Run Text="{Binding Path=GloryCount, Mode=OneWay}"></Run>
+                <Run>Gold: </Run>
+                <Run Text="{Binding Path=GoldCount, Mode=OneWay}"></Run>
             </TextBlock>
             <TextBlock Foreground="Black" HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
-                <Run>Message: </Run>
-                <Run Text="{Binding Path=Message, Mode=OneWay}"></Run>
+                <Run>Gold Max: </Run>
+                <Run Text="{Binding Path=GoldMax, Mode=OneWay}"></Run>
             </TextBlock>
+            <TextBlock Margin="0,20,0,0" >Upgrades:</TextBlock>
+            <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
+                <TextBlock>Buy 500 Max Gold:</TextBlock>
+                <Button Margin="10,0,0,0" Click="Button_Click">
+                    <TextBlock>
+                        <Run>Cost: </Run>
+                        <Run Text="{Binding Path=GoldMaxUpgradeCost, Mode=OneWay}"></Run>
+                    </TextBlock>
+                </Button>
+            </StackPanel>
         </StackPanel>
-
     </Grid>
 </Window>

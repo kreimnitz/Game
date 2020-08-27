@@ -7,6 +7,7 @@ namespace Utilities
     public enum MessageType
     {
         State = 0,
+        Request = 1,
     }
 
     public class Message
@@ -24,7 +25,7 @@ namespace Utilities
 
         public Message(MessageType type, byte[] data)
         {
-            MessageType = MessageType.State;
+            MessageType = type;
             Data = data;
         }
 

@@ -1,66 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Timers;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using System.ComponentModel;
-using System.Net;
-using System.Net.Sockets;
 using Utilities;
+using System;
 
 namespace Glory
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged, IMessageReceivedHandler
+    public partial class MainWindow : Window, IAutoNotifyPropertyChanged, IMessageReceivedHandler
     {
-        private SocketMessageTransmitter _messageTransmitter;
-        private int _gloryCount = 0;
-        private int _gloryIncome = 100;
-        private string _message = "none";
+        private ClientMessageTransmitter _messageTransmitter;
 
-        public int GloryCount
+        private int _goldCount;
+        public int GoldCount
         {
-            get { return _gloryCount; }
-            set
-            {
-                if (value != _gloryCount)
-                {
-                    _gloryCount = value;
-                    OnPropertyChanged(nameof(GloryCount));
-                }
-            }
+            get { return _goldCount; }
+            set { NotifyHelpers.SetProperty(this, ref _goldCount, value); }
         }
 
-        public string Message
+        private int _goldMax;
+        public int GoldMax
         {
-            get { return _message; }
-            set
-            {
-                if (value != _message)
-                {
-                    _message = value;
-                    OnPropertyChanged(nameof(Message));
-                }
-            }
+            get { return _goldMax; }
+            set { NotifyHelpers.SetProperty(this, ref _goldMax, value); }
         }
 
-        private Timer _incomeTimer = new Timer(1000);
+        private int _goldMaxUpgradeCost;
+        public int GoldMaxUpgradeCost
+        {
+            get { return _goldMaxUpgradeCost; }
+            set { NotifyHelpers.SetProperty(this, ref _goldMaxUpgradeCost, value); }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(string propertyName)
+        public void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -69,21 +45,30 @@ namespace Glory
         {
             InitializeComponent();
             DataContext = this;
-            _incomeTimer.AutoReset = true;
-            _incomeTimer.Elapsed += IncomeTimer_Elapsed;
-            _incomeTimer.Start();
-
             _messageTransmitter = new ClientMessageTransmitter(this);
         }
 
-        private void IncomeTimer_Elapsed(object sender, ElapsedEventArgs e)
+        protected override void OnClosed(EventArgs e)
         {
-            GloryCount += _gloryIncome;
+            _messageTransmitter.CloseConnection();
+            base.OnClosed(e);
         }
+
 
         public void HandleStateMessage(State state, object sender)
         {
-            Message = state.Text;
+            GoldCount = state.Gold;
+            GoldMax = state.GoldMax;
+            GoldMaxUpgradeCost = state.GoldMaxUpgradeCost;
+        }
+
+        public void HandleRequestMessage(Request request, object sender)
+        {
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            _messageTransmitter.SendRequestMessage(Request.UpgradeGoldMax);
         }
     }
 }
