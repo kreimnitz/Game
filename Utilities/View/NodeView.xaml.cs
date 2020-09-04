@@ -12,17 +12,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Utilities.ViewModel;
 
-namespace Utilities
+namespace Utilities.View
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class Node : UserControl
+    public partial class NodeView : UserControl
     {
-        public Node()
+        public NodeView()
         {
             InitializeComponent();
+            ViewModel = new NodeViewModel();
+            DataContext = ViewModel;
         }
+
+        public NodeViewModel ViewModel { get; set; }
     }
 }
