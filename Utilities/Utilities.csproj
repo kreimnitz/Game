@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Node.cs" />
+    <Compile Include="Model\NodeMap.cs" />
     <Compile Include="Model\NotifyHelpers.cs" />
     <Compile Include="Comms\ClientMessageTransmitter.cs" />
     <Compile Include="Comms\IMessageReceivedHandler.cs" />

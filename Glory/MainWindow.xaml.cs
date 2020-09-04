@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using Utilities;
 using System;
+using Utilities.ViewModel;
 
 namespace Glory
 {
@@ -28,6 +29,8 @@ namespace Glory
             _messageTransmitter = new ClientMessageTransmitter(this);
             PlayerStats = new Player(-1, 0, 0);
         }
+
+        public NodeMapViewModel MapViewModel { get; set; } = new NodeMapViewModel();
 
         protected override void OnClosed(EventArgs e)
         {

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utilities.Model;
 
 namespace Utilities.ViewModel
 {
@@ -11,6 +12,8 @@ namespace Utilities.ViewModel
     {
         public NodeMapViewModel()
         {
+            var nodes = new List<Node>();
+
             NodeViewModels = new ObservableCollection<NodeViewModel>();
             NodeViewModels.Add(new NodeViewModel());
             var secondNode = new NodeViewModel();

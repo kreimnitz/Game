@@ -85,6 +85,6 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
-        <utilities:NodeMapView Grid.Row="2" Grid.Column="1"></utilities:NodeMapView>
+        <utilities:NodeMapView Grid.Row="2" Grid.Column="1" DataContext="{Binding MapViewModel}"></utilities:NodeMapView>
     </Grid>
 </Window>
