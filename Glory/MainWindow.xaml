@@ -6,28 +6,82 @@
         xmlns:local="clr-namespace:Glory"
         mc:Ignorable="d"
         Title="Minimalist RTS" Height="450" Width="800">
-    <Grid Margin="0,0,2,1"
-          Background="DarkGray">
-        <StackPanel Margin="10, 10, 0, 0" HorizontalAlignment="Left">
+    <Grid Margin="0,0,2,1" Background="DarkGray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left">
             <TextBlock>Resources:</TextBlock>
-            <TextBlock Foreground="Black" HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
-                <Run>Gold: </Run>
-                <Run Text="{Binding Path=GoldCount, Mode=OneWay}"></Run>
+            <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                <Run>Glory: </Run>
+                <Run Text="{Binding Path=PlayerStats.Glory, Mode=OneWay}"></Run>
             </TextBlock>
-            <TextBlock Foreground="Black" HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
-                <Run>Gold Max: </Run>
-                <Run Text="{Binding Path=GoldMax, Mode=OneWay}"></Run>
+            <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                <Run>Income: </Run>
+                <Run Text="{Binding Path=PlayerStats.Income, Mode=OneWay}"></Run>
             </TextBlock>
-            <TextBlock Margin="0,20,0,0" >Upgrades:</TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left">
+            <TextBlock Margin="0,0,0,0" >Garrison:</TextBlock>
             <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
-                <TextBlock>Buy 500 Max Gold:</TextBlock>
-                <Button Margin="10,0,0,0" Click="Button_Click">
-                    <TextBlock>
-                        <Run>Cost: </Run>
-                        <Run Text="{Binding Path=GoldMaxUpgradeCost, Mode=OneWay}"></Run>
-                    </TextBlock>
+                <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                    <Run>Swordsman: </Run>
+                    <Run Text="{Binding Path=PlayerStats.SwordsmanGarrisonCount, Mode=OneWay}"></Run>
+                </TextBlock>
+                <Button Margin="10,0,0,0" Click="TrainSwordsman">
+                    <TextBlock Text="Train (-50G)"/>
                 </Button>
             </StackPanel>
+        </StackPanel>
+        <Border Grid.Row="0" Grid.Column="1" BorderThickness="2" BorderBrush="Black" CornerRadius="2">
+            <StackPanel >
+                <TextBlock FontSize="20" Margin="10" HorizontalAlignment="Center" Text="Monument"/>
+                <ProgressBar Height="15" Margin="10" Value="{Binding Path=PlayerStats.MonumentHealth, Mode=OneWay}"/>
+                <TextBlock Foreground="Black" HorizontalAlignment="Center" Margin="10" TextWrapping="Wrap" VerticalAlignment="Top">
+                    <Run>Enemy Attackers: </Run>
+                    <Run Text="{Binding Path=PlayerStats.EnemyAttackerCount, Mode=OneWay}"></Run>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+        <StackPanel Grid.Row="1" Grid.Column="1" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel Margin="10" Grid.Row="0" Grid.Column="0">
+                    <TextBlock Margin="0,0,0,0" >Defenders:</TextBlock>
+                    <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                    <Run>Swordsman: </Run>
+                    <Run Text="{Binding Path=PlayerStats.SwordsmanDefenderCount, Mode=OneWay}"></Run>
+                        </TextBlock>
+                        <Button Margin="10,0,0,0" Click="DeploySwordsmanDefender">
+                            <TextBlock Text="Deploy to Defend"/>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Margin="10" Grid.Row="0" Grid.Column="1">
+                    <TextBlock Margin="0,0,0,0" >Attackers:</TextBlock>
+                    <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                    <Run>Swordsman: </Run>
+                    <Run Text="{Binding Path=PlayerStats.SwordsmanAttackerCount, Mode=OneWay}"></Run>
+                        </TextBlock>
+                        <Button Margin="10,0,0,0" Click="DeploySwordsmanAttaker">
+                            <TextBlock Text="Deploy to Attack (+5G Income)"/>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
         </StackPanel>
     </Grid>
 </Window>

@@ -2,16 +2,21 @@
 
 namespace Utilities
 {
-    public interface IMessageReceivedHandler
+    public interface IServerMessageReceivedHandler
     {
-        void HandleStateMessage(State state, object sender);
+        void HandlePlayerMessage(Player player);       
+    }
 
-        void HandleRequestMessage(Request request, object sender);
+    public interface IClientMessageRecievedHandler
+    {
+        void HandleRequestMessage(Request request, int playerId);
     }
 
     public enum Request
     {
-        UpgradeGoldMax,
+        TrainSwordsman,
+        DeployAttackSwordsman,
+        DeployDefenceSwordsman
     }
 
     public static class RequestUtilities

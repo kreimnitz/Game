@@ -1,52 +1,26 @@
 ﻿using Utilities;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Timers;
-using System.Threading;
 
 namespace Server
 {
     /// <summary>
     /// Interaction logic for ServerWindow.xaml
     /// </summary>
-    public partial class ServerWindow : Window, IAutoNotifyPropertyChanged, IMessageReceivedHandler
+    public partial class ServerWindow : Window, IAutoNotifyPropertyChanged, IClientMessageRecievedHandler
     {
-        private int _goldIncome = 100;
-        private SocketMessageTransmitter _messageTransmitter;
-        private System.Timers.Timer _gameLoopTimer;
-
-        private int _goldCount = 0;
-        public int GoldCount
-        {
-            get { return _goldCount; }
-        }
-
-        private int _goldMax = 1000;
-        public int GoldMax
-        {
-            get { return _goldMax; }
-        }
-
-        private int _goldMaxUpgradeCost = 500;
-        public int GoldMaxUpgradeCost
-        {
-            get { return _goldMaxUpgradeCost; }
-        }
+        private int _deployIncome = 5;
+        private int _swordsmanTrainingCost = 50;
+        private object _modifyPlayerLock = new object();
+        private int _startingGlory = 100;
+        private int _startingGloryIncome = 10;
+        private ServerMessageTransmitter _messageTransmitter;
+        private Timer _gameLoopTimer;
+        private Player _player0;
+        private Player _player1;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -60,22 +34,26 @@ namespace Server
             DataContext = this;
             InitializeComponent();
             _messageTransmitter = new ServerMessageTransmitter(this);
-            var gloryWindow = new Glory.MainWindow();
-            gloryWindow.Show();
+            _player0 = new Player(0, _startingGlory, _startingGloryIncome);
+            _player1 = new Player(1, _startingGlory, _startingGloryIncome);
+            var gloryWindow1 = new Glory.MainWindow();
+            gloryWindow1.Show();
+            var gloryWindow2 = new Glory.MainWindow();
+            gloryWindow2.Show();
             var ignoredTask = WaitForClientAndStartGameAsync();
         }
 
         protected override void OnClosed(EventArgs e)
         {
             _gameLoopTimer.Stop();
-            _messageTransmitter.CloseConnection();
+            _messageTransmitter.Close();
             base.OnClosed(e);
         }
 
         private async Task WaitForClientAndStartGameAsync()
         {
             await _messageTransmitter.WaitForReady;
-            _gameLoopTimer = new System.Timers.Timer(1000);
+            _gameLoopTimer = new Timer(1000);
             _gameLoopTimer.Elapsed += GameLoop;
             _gameLoopTimer.AutoReset = true;
             _gameLoopTimer.Enabled = true;
@@ -84,33 +62,79 @@ namespace Server
 
         private void GameLoop(object source, ElapsedEventArgs e)
         {
-            if (_goldMax >= _goldCount + _goldIncome)
+            lock (_modifyPlayerLock)
             {
-                Interlocked.Add(ref _goldCount, _goldIncome);
-                RaisePropertyChanged(nameof(GoldCount));
-
-                _messageTransmitter.SendStateMessage(new State(_goldCount, _goldMax, _goldMaxUpgradeCost));
+                _player0.Glory += _player0.Income;
+                _player1.Glory += _player1.Income;
+                Fight(_player0, _player1);
+                Fight(_player1, _player0);
             }
+
+            _messageTransmitter.SendStatMessage(_player0);
+            _messageTransmitter.SendStatMessage(_player1);
         }
 
-        public void HandleStateMessage(State state, object sender)
+        private void Fight(Player attacker, Player defender)
         {
+            var oldAttackerCount = attacker.SwordsmanAttackerCount;
+            attacker.SwordsmanAttackerCount = Math.Max(oldAttackerCount - defender.SwordsmanDefenderCount, 0);
+            defender.SwordsmanDefenderCount = Math.Max(defender.SwordsmanDefenderCount - oldAttackerCount, 0);
+            defender.EnemyAttackerCount = attacker.SwordsmanAttackerCount;
+            defender.MonumentHealth -= attacker.SwordsmanAttackerCount;
         }
 
-        public void HandleRequestMessage(Request request, object sender)
+        public void HandleRequestMessage(Request request, int playerId)
         {
-            if (request == Request.UpgradeGoldMax)
+            var player = playerId == 0 ? _player0 : _player1;
+            lock (_modifyPlayerLock)
             {
-                if (_goldCount >= _goldMaxUpgradeCost)
+                switch (request)
                 {
-                    Interlocked.Add(ref _goldCount, -_goldMaxUpgradeCost);
-                    Interlocked.Add(ref _goldMaxUpgradeCost, _goldMaxUpgradeCost);
-                    Interlocked.Add(ref _goldMax, _goldMax);
-                    RaisePropertyChanged(nameof(GoldCount));
-                    RaisePropertyChanged(nameof(GoldMax));
-                    RaisePropertyChanged(nameof(GoldMaxUpgradeCost));
-                }
+                    case Request.DeployAttackSwordsman:
+                        DeployAttackingSwordsman(player);
+                        break;
+                    case Request.DeployDefenceSwordsman:
+                        DeployDefenceSwordsman(player);
+                        break;
+                    case Request.TrainSwordsman:
+                        TrainSwordsman(player);
+                        break;
+                    default:
+                        break;
+                }                  
             }
+            _messageTransmitter.SendStatMessage(player);
+        }
+
+        private void TrainSwordsman(Player player)
+        {
+            if (player.Glory < _swordsmanTrainingCost)
+            {
+                return;
+            }
+            player.Glory -= _swordsmanTrainingCost;
+            player.SwordsmanGarrisonCount++;
+        }
+
+        private void DeployDefenceSwordsman(Player player)
+        {
+            if (player.SwordsmanGarrisonCount == 0)
+            {
+                return;
+            }
+            player.SwordsmanGarrisonCount--;
+            player.SwordsmanDefenderCount++;
+        }
+
+        private void DeployAttackingSwordsman(Player player)
+        {
+            if (player.SwordsmanGarrisonCount == 0)
+            {
+                return;
+            }
+            player.SwordsmanGarrisonCount--;
+            player.SwordsmanAttackerCount++;
+            player.Income += _deployIncome;
         }
     }  
 }

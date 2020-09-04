@@ -6,7 +6,7 @@ namespace Utilities
 {
     public enum MessageType
     {
-        State = 0,
+        PlayerState = 0,
         Request = 1,
     }
 
@@ -65,7 +65,6 @@ namespace Utilities
         private static List<byte[]> SerializeMessage(Message message)
         {
             List<byte[]> chunks = new List<byte[]>();
-            int totalSize = HeaderSize + message.Data.Length;
             int firstChuckDataSectionSize = ChunkSize - HeaderSize;
             byte[] messageTypeBytes = BitConverter.GetBytes((int)message.MessageType);
             byte[] dataSizeBytes = BitConverter.GetBytes(message.Data.Length);
