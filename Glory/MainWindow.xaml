@@ -18,5 +18,16 @@
         <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="2" CornerRadius="5">
             <utilities:NodeMapView x:Name="_nodeMapView"></utilities:NodeMapView>
         </Border>
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left">
+            <TextBlock>Resources:</TextBlock>
+            <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                <Run>Glory: </Run>
+                <Run Text="{Binding Path=PlayerStats.Glory, Mode=OneWay}"></Run>
+            </TextBlock>
+            <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                <Run>Income: </Run>
+                <Run Text="{Binding Path=PlayerStats.Income, Mode=OneWay}"></Run>
+            </TextBlock>
+        </StackPanel>
     </Grid>
 </Window>

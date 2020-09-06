@@ -15,9 +15,7 @@ namespace Utilities.Comms
 
     public enum Request
     {
-        TrainSwordsman,
-        DeployAttackSwordsman,
-        DeployDefenceSwordsman
+        AttackNode,
     }
 
     public static class RequestUtilities

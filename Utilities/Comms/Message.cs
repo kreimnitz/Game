@@ -57,6 +57,7 @@ namespace Utilities
                 int dataRead = dataSize - dataToRead;
                 int copyLength = Math.Min(dataToRead, ChunkSize);
                 Array.Copy(readChunk, 0, data, dataRead, copyLength);
+                dataToRead -= ChunkSize;
             }
 
             return new Message(messageType, data);

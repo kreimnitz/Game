@@ -24,39 +24,18 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _income, value); }
         }
 
-        private int _monumentHealth;  
-        public int MonumentHealth
+        private int _attackPower;
+        public int AttackPower
         {
-            get { return _monumentHealth; }
-            set { NotifyHelpers.SetProperty(this, ref _monumentHealth, value); }
+            get { return _attackPower; }
+            set { NotifyHelpers.SetProperty(this, ref _attackPower, value); }
         }
 
-        private int _swordsmanGarrisonCount;
-        public int SwordsmanGarrisonCount
+        private int _attackPowerMax;
+        public int AttackPowerMax
         {
-            get { return _swordsmanGarrisonCount; }
-            set { NotifyHelpers.SetProperty(this, ref _swordsmanGarrisonCount, value); }
-        }
-
-        private int _swordsmanAttackerCount;
-        public int SwordsmanAttackerCount
-        {
-            get { return _swordsmanAttackerCount; }
-            set { NotifyHelpers.SetProperty(this, ref _swordsmanAttackerCount, value); }
-        }
-
-        private int _swordsmanDefenderCount;
-        public int SwordsmanDefenderCount
-        {
-            get { return _swordsmanDefenderCount; }
-            set { NotifyHelpers.SetProperty(this, ref _swordsmanDefenderCount, value); }
-        }
-
-        private int _enemyAttackerCount;
-        public int EnemyAttackerCount
-        {
-            get { return _enemyAttackerCount; }
-            set { NotifyHelpers.SetProperty(this, ref _enemyAttackerCount, value); }
+            get { return _attackPowerMax; }
+            set { NotifyHelpers.SetProperty(this, ref _attackPowerMax, value); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -66,11 +45,8 @@ namespace Utilities.Model
             ID = id;
             _glory = glory;
             _income = income;
-            _monumentHealth = 100;
-            _swordsmanAttackerCount = 0;
-            _swordsmanDefenderCount = 0;
-            _swordsmanGarrisonCount = 0;
-            _enemyAttackerCount = 0;
+            _attackPower = 20;
+            _attackPowerMax = 20;
         }
 
         public void RaisePropertyChanged(string propertyName)
@@ -86,11 +62,8 @@ namespace Utilities.Model
             }
             Glory = playerStats.Glory;
             Income = playerStats.Income;
-            MonumentHealth = playerStats.MonumentHealth;
-            SwordsmanAttackerCount = playerStats.SwordsmanAttackerCount;
-            SwordsmanDefenderCount = playerStats.SwordsmanDefenderCount;
-            EnemyAttackerCount = playerStats.EnemyAttackerCount;
-            SwordsmanGarrisonCount = playerStats.SwordsmanGarrisonCount;
+            AttackPower = playerStats.AttackPower;
+            AttackPowerMax = playerStats.AttackPowerMax;
         }
     }
 }

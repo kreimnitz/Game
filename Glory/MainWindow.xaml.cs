@@ -45,21 +45,12 @@ namespace Glory
         public void HandleGameStateMessage(GameState state)
         {
             PlayerStats.CopyFrom(state.Player);
-        }
+            MapViewModel.CopyToModel(state.NodeMap);
 
-        private void TrainSwordsman(object sender, RoutedEventArgs e)
-        {
-            _messageTransmitter.SendRequest(Request.TrainSwordsman);
-        }
-
-        private void DeploySwordsmanDefender(object sender, RoutedEventArgs e)
-        {
-            _messageTransmitter.SendRequest(Request.DeployDefenceSwordsman);
-        }
-
-        private void DeploySwordsmanAttaker(object sender, RoutedEventArgs e)
-        {
-            _messageTransmitter.SendRequest(Request.DeployAttackSwordsman);
+            App.Current.Dispatcher.Invoke(delegate
+            {
+                MapViewModel.SyncToModel();
+            });
         }
     }
 }

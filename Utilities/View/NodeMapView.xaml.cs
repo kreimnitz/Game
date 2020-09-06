@@ -32,7 +32,7 @@ namespace Utilities.View
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             Size = e.NewSize;
-            ViewModel.SizedChanged(Size);
+            ViewModel?.SizedChanged(Size);
         }
 
         public Size Size

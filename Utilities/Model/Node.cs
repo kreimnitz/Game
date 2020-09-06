@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Utilities.Model
@@ -21,23 +17,64 @@ namespace Utilities.Model
             Position = position;
         }
 
-        public int ID { get; set; }
+        private int _id;
+        public int ID
+        {
+            get { return _id; }
+            set { NotifyHelpers.SetProperty(this, ref _id, value); }
+        }
 
-        public NodeState State { get; set; }
+        private NodeState _state = NodeState.Neutral;
+        public NodeState State
+        {
+            get { return _state; }
+            set { NotifyHelpers.SetProperty(this, ref _state, value); }
+        }
 
-        public NodeType Type { get; set; } = NodeType.Village;
+        private NodeType _type = NodeType.Village;
+        public NodeType Type
+        {
+            get { return _type; }
+            set { NotifyHelpers.SetProperty(this, ref _type, value); }
+        }
 
-        public Point Position { get; set; }
+        private Point _position;
+        public Point Position
+        {
+            get { return _position; }
+            set { NotifyHelpers.SetProperty(this, ref _position, value); }
+        }
 
-        public int Capacity { get; set; } = 100;
+        private int _capacity = 100;
+        public int Capacity
+        {
+            get { return _capacity; }
+            set { NotifyHelpers.SetProperty(this, ref _capacity, value); }
+        }
 
-        public int DefenseLevel { get; set; } = 100;
+        private int _defenseLevel = 100;
+        public int DefenseLevel
+        {
+            get { return _defenseLevel; }
+            set { NotifyHelpers.SetProperty(this, ref _defenseLevel, value); }
+        }
 
-        public int Population { get; set; } = 50;
+        private int _population = 20;
+        public int Population
+        {
+            get { return _population; }
+            set { NotifyHelpers.SetProperty(this, ref _population, value); }
+        }
 
         public void CopyFrom(Node node)
         {
-            // implement
+            ID = node.ID;
+            State = node.State;
+            Type = node.Type;
+            Position = node.Position;
+            Capacity = node.Capacity;
+            DefenseLevel = node.DefenseLevel;
+            Population = node.Population;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
