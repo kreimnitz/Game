@@ -1,10 +1,11 @@
 ﻿using System;
+using Utilities.Model;
 
-namespace Utilities
+namespace Utilities.Comms
 {
     public interface IServerMessageReceivedHandler
     {
-        void HandlePlayerMessage(Player player);       
+        void HandleGameStateMessage(GameState state);       
     }
 
     public interface IClientMessageRecievedHandler

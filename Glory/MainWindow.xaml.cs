@@ -3,6 +3,8 @@ using System.ComponentModel;
 using Utilities;
 using System;
 using Utilities.ViewModel;
+using Utilities.Model;
+using Utilities.Comms;
 
 namespace Glory
 {
@@ -40,9 +42,9 @@ namespace Glory
         }
 
 
-        public void HandlePlayerMessage(Player playerStats)
+        public void HandleGameStateMessage(GameState state)
         {
-            PlayerStats.CopyFrom(playerStats);
+            PlayerStats.CopyFrom(state.Player);
         }
 
         private void TrainSwordsman(object sender, RoutedEventArgs e)

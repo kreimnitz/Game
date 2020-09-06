@@ -2,6 +2,8 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Utilities.Comms;
+using Utilities.Model;
 
 namespace Utilities
 {
@@ -64,8 +66,8 @@ namespace Utilities
                 var message = Message.ReceiveMessage(socket);
                 if (message.MessageType == MessageType.PlayerState)
                 {
-                    var player = Player.FromByteArray(message.Data);
-                    _handler.HandlePlayerMessage(player);
+                    var state = GameState.FromByteArray(message.Data);
+                    _handler.HandleGameStateMessage(state);
                 }
             }
         }

@@ -2,6 +2,8 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Utilities.Comms;
+using Utilities.Model;
 
 namespace Utilities
 {
@@ -46,14 +48,14 @@ namespace Utilities
             _acceptingSocket.Close();
         }
 
-        public bool SendStatMessage(Player playerStats)
+        public bool SendGameStateMessage(GameState state)
         {
-            var socket = _communicationSockets[playerStats.ID];
+            var socket = _communicationSockets[state.Player.ID];
             if (!socket.Connected)
             {
                 return false;
             }
-            var message = new Message(MessageType.PlayerState, playerStats.ToByteArray());
+            var message = new Message(MessageType.PlayerState, state.ToByteArray());
             Message.SendMessage(message, socket);
             return true;
         }

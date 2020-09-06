@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Utilities
+namespace Utilities.Model
 {
     [Serializable]
     public class Player : IAutoNotifyPropertyChanged
@@ -91,25 +91,6 @@ namespace Utilities
             SwordsmanDefenderCount = playerStats.SwordsmanDefenderCount;
             EnemyAttackerCount = playerStats.EnemyAttackerCount;
             SwordsmanGarrisonCount = playerStats.SwordsmanGarrisonCount;
-        }
-
-        public byte[] ToByteArray()
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            using (var ms = new MemoryStream())
-            {
-                bf.Serialize(ms, this);
-                return ms.ToArray();
-            }
-        }
-
-        public static Player FromByteArray(byte[] bytes)
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            using (var ms = new MemoryStream(bytes))
-            {
-                return (Player)bf.Deserialize(ms);
-            }
         }
     }
 }

@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Timers;
+using Utilities.Comms;
+using Utilities.Model;
 
 namespace Server
 {
@@ -21,6 +23,7 @@ namespace Server
         private Timer _gameLoopTimer;
         private Player _player0;
         private Player _player1;
+        private NodeMap _nodeMap = new NodeMap();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -52,6 +55,7 @@ namespace Server
 
         private async Task WaitForClientAndStartGameAsync()
         {
+            
             await _messageTransmitter.WaitForReady;
             _gameLoopTimer = new Timer(1000);
             _gameLoopTimer.Elapsed += GameLoop;
@@ -70,8 +74,8 @@ namespace Server
                 Fight(_player1, _player0);
             }
 
-            _messageTransmitter.SendStatMessage(_player0);
-            _messageTransmitter.SendStatMessage(_player1);
+            _messageTransmitter.SendGameStateMessage(new GameState(_player0, _nodeMap));
+            _messageTransmitter.SendGameStateMessage(new GameState(_player1, _nodeMap));
         }
 
         private void Fight(Player attacker, Player defender)
@@ -103,7 +107,8 @@ namespace Server
                         break;
                 }                  
             }
-            _messageTransmitter.SendStatMessage(player);
+
+            _messageTransmitter.SendGameStateMessage(new GameState(player, _nodeMap));
         }
 
         private void TrainSwordsman(Player player)

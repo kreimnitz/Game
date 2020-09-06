@@ -8,16 +8,20 @@ using System.Windows;
 
 namespace Utilities.Model
 {
-    public class Node
+    [Serializable]
+    public class Node : IAutoNotifyPropertyChanged
     {
         public Node()
         {
         }
 
-        public Node(Point position)
+        public Node(int id, Point position)
         {
+            ID = id;
             Position = position;
         }
+
+        public int ID { get; set; }
 
         public NodeState State { get; set; }
 
@@ -30,6 +34,18 @@ namespace Utilities.Model
         public int DefenseLevel { get; set; } = 100;
 
         public int Population { get; set; } = 50;
+
+        public void CopyFrom(Node node)
+        {
+            // implement
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     public enum NodeType

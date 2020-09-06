@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 using Utilities.Model;
@@ -27,13 +22,13 @@ namespace Utilities.ViewModel
 
         public Node Node { get; set; }
 
-        public Brush FillColor { get; set; } = Brushes.DarkBlue;
+        public Brush FillColor { get; set; } = Brushes.DarkGray;
 
         public Brush BorderColor { get; set; } = Brushes.Black;
 
-        public string MainLabel { get; set; } = "A";
+        public string MainLabel { get; set; } = "";
 
-        public string SubLabel { get; set; } = "1000";
+        public string SubLabel { get; set; } = "";
 
         public int Left { get; set; } = 0;
 
