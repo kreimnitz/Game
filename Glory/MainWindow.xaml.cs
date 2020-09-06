@@ -26,6 +26,7 @@ namespace Glory
         {
             InitializeComponent();
             DataContext = this;
+            _nodeMapView.DataContext = MapViewModel;
             _messageTransmitter = new ClientMessageTransmitter(this);
             PlayerStats = new Player(-1, 0, 0);
         }

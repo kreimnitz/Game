@@ -24,10 +24,24 @@ namespace Utilities.View
         public NodeMapView()
         {
             InitializeComponent();
-            ViewModel = new NodeMapViewModel();
-            DataContext = ViewModel;
+            SizeChanged += OnSizeChanged;
         }
 
-        public NodeMapViewModel ViewModel { get; set; }
+        public NodeMapViewModel ViewModel => DataContext as NodeMapViewModel;
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Size = e.NewSize;
+            ViewModel.SizedChanged(Size);
+        }
+
+        public Size Size
+        {
+            get { return (Size)GetValue(SizeProperty); }
+            set { SetValue(SizeProperty, value); }
+        }
+
+        public static readonly DependencyProperty SizeProperty =
+            DependencyProperty.Register("Size", typeof(Size), typeof(NodeMapView), new PropertyMetadata(new Size()));
     }
 }

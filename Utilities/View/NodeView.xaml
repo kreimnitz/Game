@@ -6,24 +6,30 @@
              xmlns:local="clr-namespace:Utilities"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="80">
-    <Canvas x:Name="ParentCanvas" Width="80" Height="80">
-        <Ellipse Width="80" Height="80" Stroke="{Binding Path=BorderColor, Mode=OneWay}" StrokeThickness="5"/>
-        <Ellipse Margin="10" Width="60" Height="60" Fill="{Binding Path=FillColor, Mode=OneWay}"/>
+    <Canvas x:Name="ParentCanvas" Width="{Binding Path=Size, Mode=OneWay}" Height="{Binding Path=Size, Mode=OneWay}">
+        <Ellipse 
+            Width="{Binding Path=Size, Mode=OneWay}" 
+            Height="{Binding Path=Size, Mode=OneWay}" 
+            Stroke="Black" 
+            StrokeThickness="5"/>
+        <Ellipse 
+            Margin="{Binding Path=CircleMargin, Mode=OneWay}" 
+            Width="{Binding Path=InternalCircleSize, Mode=OneWay}" 
+            Height="{Binding Path=InternalCircleSize, Mode=OneWay}" 
+            Fill="{Binding Path=FillColor, Mode=OneWay}"/>
         <Grid Width="{Binding ActualWidth, ElementName=ParentCanvas}" Height="{Binding ActualHeight, ElementName=ParentCanvas}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBox
+                <TextBlock                
                     HorizontalAlignment="Center"
                     Margin="0, -5"
                     Background="Transparent" 
-                    BorderBrush="Transparent" 
                     Foreground="White" 
                     FontSize="25" 
                     Text="{Binding Path=MainLabel, Mode=OneWay}"/>
-                <TextBox
+                <TextBlock
                     HorizontalAlignment="Center"
                     Margin="0, -3"
                     Background="Transparent" 
-                    BorderBrush="Transparent" 
                     Foreground="White" 
                     FontSize="10" 
                     Text="{Binding Path=SubLabel, Mode=OneWay}"/>

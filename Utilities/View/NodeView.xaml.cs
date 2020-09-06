@@ -24,10 +24,6 @@ namespace Utilities.View
         public NodeView()
         {
             InitializeComponent();
-            ViewModel = new NodeViewModel();
-            DataContext = ViewModel;
         }
-
-        public NodeViewModel ViewModel { get; set; }
     }
 }

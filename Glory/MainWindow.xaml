@@ -9,82 +9,14 @@
         Title="Minimalist RTS" Height="800" Width="1000">
     <Grid Margin="0,0,2,1" Background="DarkGray">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="200"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left">
-            <TextBlock>Resources:</TextBlock>
-            <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
-                <Run>Glory: </Run>
-                <Run Text="{Binding Path=PlayerStats.Glory, Mode=OneWay}"></Run>
-            </TextBlock>
-            <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
-                <Run>Income: </Run>
-                <Run Text="{Binding Path=PlayerStats.Income, Mode=OneWay}"></Run>
-            </TextBlock>
-        </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left">
-            <TextBlock Margin="0,0,0,0" >Garrison:</TextBlock>
-            <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
-                <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
-                    <Run>Swordsman: </Run>
-                    <Run Text="{Binding Path=PlayerStats.SwordsmanGarrisonCount, Mode=OneWay}"></Run>
-                </TextBlock>
-                <Button Margin="10,0,0,0" Click="TrainSwordsman">
-                    <TextBlock Text="Train (-50G)"/>
-                </Button>
-            </StackPanel>
-        </StackPanel>
-        <Border Grid.Row="0" Grid.Column="1" BorderThickness="2" BorderBrush="Black" CornerRadius="2">
-            <StackPanel >
-                <TextBlock FontSize="20" Margin="10" HorizontalAlignment="Center" Text="Monument"/>
-                <ProgressBar Height="15" Margin="10" Value="{Binding Path=PlayerStats.MonumentHealth, Mode=OneWay}"/>
-                <TextBlock Foreground="Black" HorizontalAlignment="Center" Margin="10" TextWrapping="Wrap" VerticalAlignment="Top">
-                    <Run>Enemy Attackers: </Run>
-                    <Run Text="{Binding Path=PlayerStats.EnemyAttackerCount, Mode=OneWay}"></Run>
-                </TextBlock>
-            </StackPanel>
+        <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="2" CornerRadius="5">
+            <utilities:NodeMapView x:Name="_nodeMapView"></utilities:NodeMapView>
         </Border>
-        <StackPanel Grid.Row="1" Grid.Column="1" >
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <StackPanel Margin="10" Grid.Row="0" Grid.Column="0">
-                    <TextBlock Margin="0,0,0,0" >Defenders:</TextBlock>
-                    <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
-                        <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
-                    <Run>Swordsman: </Run>
-                    <Run Text="{Binding Path=PlayerStats.SwordsmanDefenderCount, Mode=OneWay}"></Run>
-                        </TextBlock>
-                        <Button Margin="10,0,0,0" Click="DeploySwordsmanDefender">
-                            <TextBlock Text="Deploy to Defend"/>
-                        </Button>
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel Margin="10" Grid.Row="0" Grid.Column="1">
-                    <TextBlock Margin="0,0,0,0" >Attackers:</TextBlock>
-                    <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
-                        <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
-                    <Run>Swordsman: </Run>
-                    <Run Text="{Binding Path=PlayerStats.SwordsmanAttackerCount, Mode=OneWay}"></Run>
-                        </TextBlock>
-                        <Button Margin="10,0,0,0" Click="DeploySwordsmanAttaker">
-                            <TextBlock Text="Deploy to Attack (+5G Income)"/>
-                        </Button>
-                    </StackPanel>
-                </StackPanel>
-            </Grid>
-        </StackPanel>
-        <utilities:NodeMapView Grid.Row="2" Grid.Column="1" DataContext="{Binding MapViewModel}"></utilities:NodeMapView>
     </Grid>
 </Window>

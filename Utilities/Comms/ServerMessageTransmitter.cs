@@ -46,10 +46,16 @@ namespace Utilities
             _acceptingSocket.Close();
         }
 
-        public void SendStatMessage(Player playerStats)
+        public bool SendStatMessage(Player playerStats)
         {
+            var socket = _communicationSockets[playerStats.ID];
+            if (!socket.Connected)
+            {
+                return false;
+            }
             var message = new Message(MessageType.PlayerState, playerStats.ToByteArray());
-            Message.SendMessage(message, _communicationSockets[playerStats.ID]);
+            Message.SendMessage(message, socket);
+            return true;
         }
 
         private void AcceptCallback(IAsyncResult ar)

@@ -10,6 +10,15 @@ namespace Utilities.Model
 {
     public class Node
     {
+        public Node()
+        {
+        }
+
+        public Node(Point position)
+        {
+            Position = position;
+        }
+
         public NodeState State { get; set; }
 
         public NodeType Type { get; set; } = NodeType.Village;
