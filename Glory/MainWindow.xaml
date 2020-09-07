@@ -15,7 +15,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="200"></RowDefinition>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="2" CornerRadius="5">
+        <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5">
             <utilities:NodeMapView x:Name="_nodeMapView"></utilities:NodeMapView>
         </Border>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left">

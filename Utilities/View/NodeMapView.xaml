@@ -7,24 +7,5 @@
              xmlns:viewModels="clr-namespace:Utilities.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="1000" d:DesignWidth="1000">
-    <Grid>
-        <ItemsControl ItemsSource="{Binding NodeViewModels}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type viewModels:NodeViewModel}">
-                    <local:NodeView />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemContainerStyle>
-                <Style>
-                    <Setter Property="Canvas.Left" Value="{Binding Left}" />
-                    <Setter Property="Canvas.Top" Value="{Binding Top}" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
-        </ItemsControl>
-    </Grid>
+    <Canvas x:Name="_canvas"></Canvas>
 </UserControl>

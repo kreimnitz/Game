@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Utilities
+namespace Utilities.Model
 {
     public interface IAutoNotifyPropertyChanged : INotifyPropertyChanged
     {

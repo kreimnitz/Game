@@ -28,7 +28,7 @@ namespace Glory
         {
             InitializeComponent();
             DataContext = this;
-            _nodeMapView.DataContext = MapViewModel;
+            _nodeMapView.SetDataContext(MapViewModel);
             _messageTransmitter = new ClientMessageTransmitter(this);
             PlayerStats = new Player(-1, 0, 0);
         }
@@ -47,7 +47,7 @@ namespace Glory
             PlayerStats.CopyFrom(state.Player);
             MapViewModel.CopyToModel(state.NodeMap);
 
-            App.Current.Dispatcher.Invoke(delegate
+            Application.Current.Dispatcher.Invoke(delegate
             {
                 MapViewModel.SyncToModel();
             });

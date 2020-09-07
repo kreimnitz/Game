@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 
-namespace Utilities
+namespace Utilities.Comms
 {
     public enum MessageType
     {

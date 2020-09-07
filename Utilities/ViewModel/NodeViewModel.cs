@@ -9,18 +9,18 @@ namespace Utilities.ViewModel
     {
         public NodeViewModel()
         {
-            Node = new Node();
+            Model = new Node();
         }
 
         public NodeViewModel(Node node)
         {
-            Node = node;
+            Model = node;
             FillColor = NodeStateToFillColor(node.State);
             MainLabel = NodeTypeToLabel(node.Type);
             SubLabel = string.IsNullOrEmpty(MainLabel) ? string.Empty : node.Population.ToString();
         }
 
-        public Node Node { get; set; }
+        public Node Model { get; set; }
 
         public Brush FillColor { get; set; } = Brushes.DarkGray;
 
@@ -51,8 +51,8 @@ namespace Utilities.ViewModel
         {
             int width = (int)mapSize.Width - Size;
             int height = (int)mapSize.Height - Size;
-            Left = (int)(width * Node.Position.X);
-            double yPoint = 1 - Node.Position.Y;
+            Left = (int)(width * Model.Position.X);
+            double yPoint = 1 - Model.Position.Y;
             Top = (int)(height * yPoint);
             RaisePropertyChanged(nameof(Left));
             RaisePropertyChanged(nameof(Top));

@@ -2,10 +2,9 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Utilities.Comms;
 using Utilities.Model;
 
-namespace Utilities
+namespace Utilities.Comms
 {
     public class ClientMessageTransmitter
     {

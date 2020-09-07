@@ -13,12 +13,12 @@ namespace Utilities.Model
 
         public Node(int id, Point position)
         {
-            ID = id;
+            Id = id;
             Position = position;
         }
 
         private int _id;
-        public int ID
+        public int Id
         {
             get { return _id; }
             set { NotifyHelpers.SetProperty(this, ref _id, value); }
@@ -68,7 +68,7 @@ namespace Utilities.Model
 
         public void CopyFrom(Node node)
         {
-            ID = node.ID;
+            Id = node.Id;
             State = node.State;
             Type = node.Type;
             Position = node.Position;

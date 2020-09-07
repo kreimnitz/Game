@@ -58,6 +58,7 @@ namespace Server
             _nodeMap.AddNode(new Node(6, new Point(0.33, 0.75)));
             _nodeMap.AddNode(new Node(7, new Point(0.66, 0.75)));
             var bottomBase = new Node(8, new Point(0.5, 1));
+            _nodeMap.AddEdge(0, 1);
             bottomBase.State = NodeState.P1Controlled;
             _nodeMap.AddNode(bottomBase);
         }
