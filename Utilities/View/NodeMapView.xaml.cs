@@ -1,4 +1,8 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -24,32 +28,83 @@ namespace Utilities.View
         public void SetDataContext(NodeMapViewModel viewModel)
         {
             DataContext = viewModel;
-            viewModel.NodeViewModels.CollectionChanged += NodesChanged;
-            viewModel.EdgeViewModels.CollectionChanged += EdgesChanged;
+            viewModel.MapChanged += OnMapChanged;
             ViewModel.Arrange();
         }
 
-        private void NodesChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnMapChanged(object sender, MapChangedEventArgs e)
         {
-            foreach (var item in e.NewItems)
+            foreach (var newNodeViewModel in e.AddedNodes)
             {
-                var newNodeViewModel = (NodeViewModel)item;
-                _canvas.Children.Add(new NodeView(newNodeViewModel));
+                var newNodeView = new NodeView(newNodeViewModel);
+                newNodeView.MouseOverChanged += OnNodeHoveredChanged;
+                _canvas.Children.Add(newNodeView);
             }
 
-            ViewModel.Arrange();
-        }
-
-        private void EdgesChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            foreach (var item in e.NewItems)
+            foreach (var removedNodeViewModel in e.RemovedNodes)
             {
-                var newEdgeViewModel = (EdgeViewModel)item;
+                NodeView toRemove = GetNodeViewFromViewModel(removedNodeViewModel);
+                if (toRemove != null)
+                {
+                    toRemove.MouseOverChanged -= OnNodeHoveredChanged;
+                    _canvas.Children.Remove(toRemove);
+                }
+            }
+
+            foreach (var newEdgeViewModel in e.AddedEdges)
+            {
                 var line = CreateLine(newEdgeViewModel);
                 _canvas.Children.Add(line);
             }
 
+            foreach (var removedEdgeViewModel in e.RemovedEdges)
+            {
+                var line = GetLineFromViewModel(removedEdgeViewModel);
+                _canvas.Children.Remove(line);
+            }
+
             ViewModel.Arrange();
+        }
+
+        private NodeView GetNodeViewFromViewModel(NodeViewModel nodeViewModel)
+        {
+            NodeView foundNodeView = null;
+            foreach (var child in _canvas.Children)
+            {
+                if (child is NodeView nodeView && nodeView.ViewModel == nodeViewModel)
+                {
+                    foundNodeView = nodeView;
+                }
+            }
+            return foundNodeView;
+        }
+
+        private Line GetLineFromViewModel(EdgeViewModel edgeViewModel)
+        {
+            Line foundLine = null;
+            foreach (var child in _canvas.Children)
+            {
+                if (child is Line line && line.DataContext == edgeViewModel)
+                {
+                    foundLine = line;
+                }
+            }
+            return foundLine;
+        }
+
+        private void OnNodeHoveredChanged(object sender, bool hovered)
+        {
+            if (sender is NodeView nodeView)
+            {
+                if (hovered)
+                {
+                    ViewModel.HoveredNode = nodeView.ViewModel;
+                }
+                else if (ViewModel.HoveredNode == nodeView.ViewModel)
+                {
+                    ViewModel.HoveredNode = null;
+                }
+            }
         }
 
         private Line CreateLine(EdgeViewModel edgeViewModel)

@@ -20,6 +20,13 @@ namespace Utilities.ViewModel
             SubLabel = string.IsNullOrEmpty(MainLabel) ? string.Empty : node.Population.ToString();
         }
 
+        private bool _hovered = false;
+        public bool Hovered
+        {
+            get { return _hovered; }
+            set { NotifyHelpers.SetProperty(this, ref _hovered, value); }
+        }
+
         public Node Model { get; set; }
 
         public Brush FillColor { get; set; } = Brushes.DarkGray;

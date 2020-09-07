@@ -39,5 +39,10 @@
                     Text="{Binding Path=SubLabel, Mode=OneWay}"/>
             </StackPanel>
         </Grid>
+        <Ellipse 
+            IsMouseDirectlyOverChanged="Hitbox_IsMouseDirectlyOverChanged"
+            Width="{Binding Path=Size, Mode=OneWay}" 
+            Height="{Binding Path=Size, Mode=OneWay}" 
+            Fill="Transparent"/>
     </Canvas>
 </UserControl>

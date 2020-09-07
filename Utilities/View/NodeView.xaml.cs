@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using Utilities.ViewModel;
 
@@ -28,5 +30,16 @@ namespace Utilities.View
         }
 
         public NodeViewModel ViewModel => DataContext as NodeViewModel;
+
+        public event EventHandler<bool> MouseOverChanged;
+
+        private void Hitbox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is bool hovered && ViewModel != null)
+            {
+                MouseOverChanged.Invoke(this, hovered);
+                ViewModel.Hovered = hovered;
+            }
+        }
     }
 }

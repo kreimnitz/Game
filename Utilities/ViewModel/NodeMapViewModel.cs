@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -23,9 +24,24 @@ namespace Utilities.ViewModel
 
         public NodeMap Model { get; set; }
 
-        public ObservableCollection<NodeViewModel> NodeViewModels { get; set; } = new ObservableCollection<NodeViewModel>();
+        public string HoveredId => HoveredNode?.Model.Id.ToString() ?? "none";
 
-        public ObservableCollection<EdgeViewModel> EdgeViewModels { get; set; } = new ObservableCollection<EdgeViewModel>();
+        private NodeViewModel _hoveredNode = null;
+        public NodeViewModel HoveredNode
+        { 
+            get { return _hoveredNode; } 
+            set 
+            {
+                NotifyHelpers.SetProperty(this, ref _hoveredNode, value);
+                RaisePropertyChanged(nameof(HoveredId));
+            } 
+        }
+
+        public List<NodeViewModel> NodeViewModels { get; set; } = new List<NodeViewModel>();
+
+        public List<EdgeViewModel> EdgeViewModels { get; set; } = new List<EdgeViewModel>();
+
+        public event EventHandler<MapChangedEventArgs> MapChanged;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -44,29 +60,38 @@ namespace Utilities.ViewModel
 
         public void SyncToModel()
         {
-            SyncNodes();
-            SyncEdges();
+            (List<NodeViewModel> addedNodes, List<NodeViewModel> removedNodes) = SyncNodes();
+            (List<EdgeViewModel> addedEdges, List<EdgeViewModel> removedEdges) = SyncEdges();
 
-            RaisePropertyChanged(string.Empty);
-            foreach (var nodeViewModel in NodeViewModels)
+            Arrange();
+            if (addedNodes.Count == 0 && removedNodes.Count == 0 && addedEdges.Count == 0 && removedEdges.Count == 0)
             {
-                nodeViewModel.UpdatePosition(_mapSize);
-                nodeViewModel.RaisePropertyChanged(string.Empty);
+                return;
             }
+
+            var mapChangedArgs = new MapChangedEventArgs()
+            {
+                AddedNodes = addedNodes,
+                RemovedNodes = removedNodes,
+                AddedEdges = addedEdges,
+                RemovedEdges = removedEdges
+            };
+            MapChanged.Invoke(this, mapChangedArgs);
         }
 
-        private void SyncNodes()
+        private (List<NodeViewModel> addedNodes, List<NodeViewModel> removedNodes) SyncNodes()
         {
-            var toRemove = new List<NodeViewModel>();
+            var addedNodes = new List<NodeViewModel>();
+            var removedNodes = new List<NodeViewModel>();
             foreach (var viewModel in NodeViewModels)
             {
                 if (!Model.ContainsNode(viewModel.Model))
                 {
-                    toRemove.Add(viewModel);
+                    removedNodes.Add(viewModel);
                 }
             }
 
-            foreach (var viewModelToRemove in toRemove)
+            foreach (var viewModelToRemove in removedNodes)
             {
                 NodeViewModels.Remove(viewModelToRemove);
             }
@@ -79,23 +104,27 @@ namespace Utilities.ViewModel
                 }
                 else
                 {
-                    NodeViewModels.Add(new NodeViewModel(node));
+                    var nodeToAdd = new NodeViewModel(node);
+                    NodeViewModels.Add(nodeToAdd);
+                    addedNodes.Add(nodeToAdd);
                 }
             }
+            return (addedNodes, removedNodes);
         }
 
-        private void SyncEdges()
+        private (List<EdgeViewModel> addedEdges, List<EdgeViewModel> removedEdges) SyncEdges()
         {
-            var toRemove = new List<EdgeViewModel>();
+            var removedEdges = new List<EdgeViewModel>();
+            var addedEdges = new List<EdgeViewModel>();
             foreach (var viewModel in EdgeViewModels)
             {
                 if (!Model.ContainsEdge(viewModel.Model))
                 {
-                    toRemove.Add(viewModel);
+                    removedEdges.Add(viewModel);
                 }
             }
 
-            foreach (var viewModelToRemove in toRemove)
+            foreach (var viewModelToRemove in removedEdges)
             {
                 EdgeViewModels.Remove(viewModelToRemove);
             }
@@ -110,9 +139,13 @@ namespace Utilities.ViewModel
                 {
                     var nodeVm1 = NodeViewModels.First(n => n.Model.Id == edge.Node1.Id);
                     var nodeVm2 = NodeViewModels.First(n => n.Model.Id == edge.Node2.Id);
-                    EdgeViewModels.Add(new EdgeViewModel(edge, nodeVm1, nodeVm2));
+                    var newEdge = new EdgeViewModel(edge, nodeVm1, nodeVm2);
+                    EdgeViewModels.Add(newEdge);
+                    addedEdges.Add(newEdge);
                 }
             }
+
+            return (addedEdges, removedEdges);
         }
 
         public void SizedChanged(Size newSize)
