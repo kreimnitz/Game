@@ -18,16 +18,46 @@
         <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5">
             <utilities:NodeMapView x:Name="_nodeMapView"></utilities:NodeMapView>
         </Border>
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left">
-            <TextBlock>Resources:</TextBlock>
-            <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
-                <Run>Glory: </Run>
-                <Run Text="{Binding Path=PlayerStats.Glory, Mode=OneWay}"></Run>
-            </TextBlock>
-            <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
-                <Run>Income: </Run>
-                <Run Text="{Binding Path=PlayerStats.Income, Mode=OneWay}"></Run>
-            </TextBlock>
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+            <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5">
+                <StackPanel Margin="10" HorizontalAlignment="Left" Width="100">
+                    <TextBlock>Resources:</TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                        <Run>Glory: </Run>
+                        <Run Text="{Binding Path=PlayerStats.Glory, Mode=OneWay}"></Run>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                        <Run>Income: </Run>
+                        <Run Text="{Binding Path=PlayerStats.Income, Mode=OneWay}"></Run>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5">
+                <StackPanel Margin="10, 10, 0, 0" HorizontalAlignment="Left">
+                    <TextBlock HorizontalAlignment="Center" Margin="5">
+                        <Run>Attack Power: </Run>
+                        <Run Text="{Binding Path=PlayerStats.AttackPower, Mode=OneWay}"></Run>
+                    </TextBlock>
+                    <ProgressBar 
+                        Height="20" 
+                        Width="200" 
+                        Minimum="0" 
+                        Value="{Binding Path=PlayerStats.AttackPower, Mode=OneWay}" 
+                        Maximum="{Binding Path=PlayerStats.AttackPowerMax, Mode=OneWay}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="0" Text="0"/>
+                        <TextBlock Grid.Column="2" HorizontalAlignment="Right" Margin="0" Text="{Binding Path=PlayerStats.AttackPowerMax, Mode=OneWay}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
         </StackPanel>
     </Grid>
 </Window>

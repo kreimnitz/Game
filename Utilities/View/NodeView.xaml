@@ -10,6 +10,10 @@
         <Ellipse 
             Width="{Binding Path=Size, Mode=OneWay}" 
             Height="{Binding Path=Size, Mode=OneWay}" 
+            Fill="DarkGray"/>
+        <Ellipse 
+            Width="{Binding Path=Size, Mode=OneWay}" 
+            Height="{Binding Path=Size, Mode=OneWay}" 
             Stroke="Black" 
             StrokeThickness="5"/>
         <Ellipse 
