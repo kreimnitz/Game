@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Utilities.ViewModel;
@@ -20,7 +22,12 @@ namespace Utilities.View
         public NodeMapView()
         {
             InitializeComponent();
-            SizeChanged += OnSizeChanged;
+            _canvas.SizeChanged += OnSizeChanged;
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            base.OnMouseUp(e);
         }
 
         public NodeMapViewModel ViewModel => DataContext as NodeMapViewModel;
@@ -30,6 +37,12 @@ namespace Utilities.View
             DataContext = viewModel;
             viewModel.MapChanged += OnMapChanged;
             ViewModel.Arrange();
+
+            Binding cursorBinding = new Binding("Cursor");
+            cursorBinding.Source = ViewModel;
+            cursorBinding.Mode = BindingMode.OneWay;
+            cursorBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            BindingOperations.SetBinding(this, CursorProperty, cursorBinding);
         }
 
         private void OnMapChanged(object sender, MapChangedEventArgs e)

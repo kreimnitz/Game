@@ -50,17 +50,29 @@ namespace Server
             var topBase = new Node(0, new Point(0.5, 0));
             topBase.State = NodeState.P0Controlled;
             _nodeMap.AddNode(topBase);
-            _nodeMap.AddNode(new Node(1, new Point(0.33, 0.25)));
-            _nodeMap.AddNode(new Node(2, new Point(0.66, 0.25)));
+            _nodeMap.AddNode(new Node(1, new Point(0.375, 0.25)));
+            _nodeMap.AddNode(new Node(2, new Point(0.625, 0.25)));
             _nodeMap.AddNode(new Node(3, new Point(0.25, 0.5)));
             _nodeMap.AddNode(new Node(4, new Point(0.5, 0.5)));
             _nodeMap.AddNode(new Node(5, new Point(0.75, 0.5)));
-            _nodeMap.AddNode(new Node(6, new Point(0.33, 0.75)));
-            _nodeMap.AddNode(new Node(7, new Point(0.66, 0.75)));
+            _nodeMap.AddNode(new Node(6, new Point(0.375, 0.75)));
+            _nodeMap.AddNode(new Node(7, new Point(0.625, 0.75)));
             var bottomBase = new Node(8, new Point(0.5, 1));
-            _nodeMap.AddEdge(0, 1);
             bottomBase.State = NodeState.P1Controlled;
             _nodeMap.AddNode(bottomBase);
+
+            _nodeMap.AddEdge(0, 1);
+            _nodeMap.AddEdge(0, 2);
+            _nodeMap.AddEdge(1, 3);
+            _nodeMap.AddEdge(1, 4);
+            _nodeMap.AddEdge(2, 4);
+            _nodeMap.AddEdge(2, 5);
+            _nodeMap.AddEdge(3, 6);
+            _nodeMap.AddEdge(4, 6);
+            _nodeMap.AddEdge(4, 7);
+            _nodeMap.AddEdge(5, 7);
+            _nodeMap.AddEdge(6, 8);
+            _nodeMap.AddEdge(7, 8);
         }
 
         protected override void OnClosed(EventArgs e)

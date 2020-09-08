@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using Utilities.Model;
 
 namespace Utilities.ViewModel
 {
     public class NodeMapViewModel : IAutoNotifyPropertyChanged
     {
+        private Cursor _attackCursor;
         private object _modelLock = new object();
         private Size _mapSize = new Size();
 
@@ -19,6 +21,42 @@ namespace Utilities.ViewModel
             foreach (var node in Model.Nodes)
             {
                 NodeViewModels.Add(new NodeViewModel(node));
+            }
+            var cursorMemoryStream = new MemoryStream(Properties.Resources.attackCursor);
+            _attackCursor = new Cursor(cursorMemoryStream);
+        }
+
+        private Cursor _cursor;
+        public Cursor Cursor
+        {
+            get { return _cursor; }
+            set { NotifyHelpers.SetProperty(this, ref _cursor, value); }
+        }
+
+        private MapMode _mode = MapMode.None;
+        public MapMode Mode
+        {
+            get { return _mode; }
+            set
+            {
+                var updated = NotifyHelpers.SetProperty(this, ref _mode, value);
+                if (updated)
+                {
+                    HandleModeSwitch(value);
+                }
+            }
+        }
+
+        private void HandleModeSwitch(MapMode newMode)
+        {
+            switch (newMode)
+            {
+                case MapMode.Attack:
+                    Cursor = _attackCursor;
+                    break;
+                default:
+                    Cursor = Cursors.Arrow;
+                    break;
             }
         }
 
@@ -32,9 +70,12 @@ namespace Utilities.ViewModel
             get { return _hoveredNode; } 
             set 
             {
-                NotifyHelpers.SetProperty(this, ref _hoveredNode, value);
-                RaisePropertyChanged(nameof(HoveredId));
-            } 
+                var updated = NotifyHelpers.SetProperty(this, ref _hoveredNode, value);
+                if (updated)
+                {
+                    RaisePropertyChanged(nameof(HoveredId));
+                }
+            }
         }
 
         public List<NodeViewModel> NodeViewModels { get; set; } = new List<NodeViewModel>();
@@ -166,5 +207,12 @@ namespace Utilities.ViewModel
                 edgeViewModel.UpdatePosition();
             }
         }
+    }
+
+    public enum MapMode
+    {
+        Attack,
+        Fortify,
+        None
     }
 }

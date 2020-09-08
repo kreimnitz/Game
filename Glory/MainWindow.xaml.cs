@@ -1,10 +1,11 @@
 ﻿using System.Windows;
 using System.ComponentModel;
-using Utilities;
 using System;
 using Utilities.ViewModel;
 using Utilities.Model;
 using Utilities.Comms;
+using System.Windows.Input;
+using System.IO;
 
 namespace Glory
 {
@@ -31,9 +32,26 @@ namespace Glory
             _nodeMapView.SetDataContext(MapViewModel);
             _messageTransmitter = new ClientMessageTransmitter(this);
             PlayerStats = new Player(-1, 0, 0);
+            
         }
 
         public NodeMapViewModel MapViewModel { get; set; } = new NodeMapViewModel();
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.A)
+            {
+                MapViewModel.Mode = MapMode.Attack;
+            }
+            e.Handled = false;
+            base.OnKeyDown(e);
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            base.OnMouseUp(e);
+            MapViewModel.Mode = MapMode.None;
+        }
 
         protected override void OnClosed(EventArgs e)
         {
@@ -52,5 +70,7 @@ namespace Glory
                 MapViewModel.SyncToModel();
             });
         }
+
+        
     }
 }
