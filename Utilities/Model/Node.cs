@@ -59,7 +59,7 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _defenseLevel, value); }
         }
 
-        private int _population = 20;
+        private int _population = 10;
         public int Population
         {
             get { return _population; }
@@ -97,5 +97,26 @@ namespace Utilities.Model
         P0Controlled,
         P1Controlled,
         Neutral
+    }
+
+    public static class NodeStateUtilities
+    {
+        public static NodeState FromPlayerId(int playerId)
+        {
+            return playerId == 0 ? NodeState.P0Controlled : NodeState.P1Controlled;
+        }
+
+        public static int ToPlayerId(NodeState state)
+        {
+            if (state == NodeState.P0Controlled)
+            {
+                return 0;
+            }
+            else if (state == NodeState.P1Controlled)
+            {
+                return 1;
+            }
+            return -1;
+        }
     }
 }

@@ -25,11 +25,6 @@ namespace Utilities.View
             _canvas.SizeChanged += OnSizeChanged;
         }
 
-        protected override void OnMouseUp(MouseButtonEventArgs e)
-        {
-            base.OnMouseUp(e);
-        }
-
         public NodeMapViewModel ViewModel => DataContext as NodeMapViewModel;
 
         public void SetDataContext(NodeMapViewModel viewModel)

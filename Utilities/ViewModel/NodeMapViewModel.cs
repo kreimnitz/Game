@@ -12,6 +12,7 @@ namespace Utilities.ViewModel
     public class NodeMapViewModel : IAutoNotifyPropertyChanged
     {
         private Cursor _attackCursor;
+        private Cursor _fortifyCursor;
         private object _modelLock = new object();
         private Size _mapSize = new Size();
 
@@ -22,8 +23,10 @@ namespace Utilities.ViewModel
             {
                 NodeViewModels.Add(new NodeViewModel(node));
             }
-            var cursorMemoryStream = new MemoryStream(Properties.Resources.attackCursor);
-            _attackCursor = new Cursor(cursorMemoryStream);
+            var attackCursorStream = new MemoryStream(Properties.Resources.attackCursor);
+            _attackCursor = new Cursor(attackCursorStream);
+            var fortifyCursorStream = new MemoryStream(Properties.Resources.fortifyCursor);
+            _fortifyCursor = new Cursor(fortifyCursorStream);
         }
 
         private Cursor _cursor;
@@ -33,8 +36,8 @@ namespace Utilities.ViewModel
             set { NotifyHelpers.SetProperty(this, ref _cursor, value); }
         }
 
-        private MapMode _mode = MapMode.None;
-        public MapMode Mode
+        private MapInputMode _mode = MapInputMode.None;
+        public MapInputMode Mode
         {
             get { return _mode; }
             set
@@ -47,12 +50,15 @@ namespace Utilities.ViewModel
             }
         }
 
-        private void HandleModeSwitch(MapMode newMode)
+        private void HandleModeSwitch(MapInputMode newMode)
         {
             switch (newMode)
             {
-                case MapMode.Attack:
+                case MapInputMode.Attack:
                     Cursor = _attackCursor;
+                    break;
+                case MapInputMode.Fortify:
+                    Cursor = _fortifyCursor;
                     break;
                 default:
                     Cursor = Cursors.Arrow;
@@ -62,7 +68,7 @@ namespace Utilities.ViewModel
 
         public NodeMap Model { get; set; }
 
-        public string HoveredId => HoveredNode?.Model.Id.ToString() ?? "none";
+        public int HoveredId => HoveredNode?.Model.Id ?? -1;
 
         private NodeViewModel _hoveredNode = null;
         public NodeViewModel HoveredNode
@@ -209,7 +215,7 @@ namespace Utilities.ViewModel
         }
     }
 
-    public enum MapMode
+    public enum MapInputMode
     {
         Attack,
         Fortify,

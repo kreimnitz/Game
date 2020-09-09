@@ -6,8 +6,9 @@ namespace Utilities.Comms
 {
     public enum MessageType
     {
-        PlayerState = 0,
-        Request = 1,
+        GameState = 0,
+        AttackNodeRequest = 1,
+        FortifyNodeRequest = 2,
     }
 
     public class Message

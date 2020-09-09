@@ -5,72 +5,41 @@ using Utilities.ViewModel;
 using Utilities.Model;
 using Utilities.Comms;
 using System.Windows.Input;
-using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows.Controls;
 
 namespace Glory
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IAutoNotifyPropertyChanged, IServerMessageReceivedHandler
+    public partial class MainWindow : Window
     {
-        private ClientMessageTransmitter _messageTransmitter;
-
-        public Player PlayerStats { get; private set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void RaisePropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        public ClientWindowViewModel ViewModel => DataContext as ClientWindowViewModel;
 
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = this;
-            _nodeMapView.SetDataContext(MapViewModel);
-            _messageTransmitter = new ClientMessageTransmitter(this);
-            PlayerStats = new Player(-1, 0, 0);
-            
+            DataContext = new ClientWindowViewModel();
+            _nodeMapView.SetDataContext(ViewModel.MapViewModel);
         }
-
-        public NodeMapViewModel MapViewModel { get; set; } = new NodeMapViewModel();
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.Key == Key.A)
-            {
-                MapViewModel.Mode = MapMode.Attack;
-            }
-            e.Handled = false;
+            ViewModel.OnKeyDown(e);
             base.OnKeyDown(e);
         }
 
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
+            ViewModel.OnMouseUp(e);
             base.OnMouseUp(e);
-            MapViewModel.Mode = MapMode.None;
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            _messageTransmitter.Close();
+            ViewModel.OnClosed();
             base.OnClosed(e);
-        }
-
-
-        public void HandleGameStateMessage(GameState state)
-        {
-            PlayerStats.CopyFrom(state.Player);
-            MapViewModel.CopyToModel(state.NodeMap);
-
-            Application.Current.Dispatcher.Invoke(delegate
-            {
-                MapViewModel.SyncToModel();
-            });
-        }
-
-        
+        }        
     }
 }

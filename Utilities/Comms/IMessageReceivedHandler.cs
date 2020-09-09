@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Utilities.Model;
 
 namespace Utilities.Comms
@@ -10,24 +11,30 @@ namespace Utilities.Comms
 
     public interface IClientMessageRecievedHandler
     {
-        void HandleRequestMessage(Request request, int playerId);
+        void HandleAttackRequestMessage(AttackNodeRequest request, int playerId);
+
+        void HandleFortifyRequestMessage(FortifyNodeRequest request, int playerId);
     }
 
-    public enum Request
+    public static class SerializationUtilities
     {
-        AttackNode,
-    }
-
-    public static class RequestUtilities
-    {
-        public static byte[] ToByteArray(Request request)
+        public static byte[] ToByteArray<T>(T toSerialize)
         {
-            return BitConverter.GetBytes((int)request);
+            BinaryFormatter bf = new BinaryFormatter();
+            using (var ms = new MemoryStream())
+            {
+                bf.Serialize(ms, toSerialize);
+                return ms.ToArray();
+            }
         }
 
-        public static Request FromByteArray(byte[] bytes)
+        public static T FromByteArray<T>(byte[] bytes)
         {
-            return (Request)BitConverter.ToInt32(bytes, 0);
+            BinaryFormatter bf = new BinaryFormatter();
+            using (var ms = new MemoryStream(bytes))
+            {
+                return (T)bf.Deserialize(ms);
+            }
         }
     }
 }

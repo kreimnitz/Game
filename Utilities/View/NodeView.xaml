@@ -28,15 +28,22 @@
                     Margin="0, -5"
                     Background="Transparent" 
                     Foreground="White" 
-                    FontSize="25" 
+                    FontSize="20" 
                     Text="{Binding Path=MainLabel, Mode=OneWay}"/>
                 <TextBlock
                     HorizontalAlignment="Center"
-                    Margin="0, -3"
+                    Margin="0, 0"
                     Background="Transparent" 
                     Foreground="White" 
                     FontSize="10" 
-                    Text="{Binding Path=SubLabel, Mode=OneWay}"/>
+                    Text="{Binding Path=SubLabel1, Mode=OneWay}"/>
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Margin="0, -2"
+                    Background="Transparent" 
+                    Foreground="White" 
+                    FontSize="10" 
+                    Text="{Binding Path=SubLabel2, Mode=OneWay}"/>
             </StackPanel>
         </Grid>
         <Ellipse 

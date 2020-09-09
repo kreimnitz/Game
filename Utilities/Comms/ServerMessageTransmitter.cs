@@ -54,7 +54,7 @@ namespace Utilities.Comms
             {
                 return false;
             }
-            var message = new Message(MessageType.PlayerState, state.ToByteArray());
+            var message = new Message(MessageType.GameState, SerializationUtilities.ToByteArray(state));
             Message.SendMessage(message, socket);
             return true;
         }
@@ -84,10 +84,15 @@ namespace Utilities.Comms
             {
                 await Task.Delay(1);
                 var message = Message.ReceiveMessage(socket);
-                if (message.MessageType == MessageType.Request)
+                if (message.MessageType == MessageType.AttackNodeRequest)
                 {
-                    var request = RequestUtilities.FromByteArray(message.Data);
-                    _handler.HandleRequestMessage(request, playerNumber);
+                    var request = SerializationUtilities.FromByteArray<AttackNodeRequest>(message.Data);
+                    _handler.HandleAttackRequestMessage(request, playerNumber);
+                }
+                if (message.MessageType == MessageType.FortifyNodeRequest)
+                {
+                    var request = SerializationUtilities.FromByteArray<FortifyNodeRequest>(message.Data);
+                    _handler.HandleFortifyRequestMessage(request, playerNumber);
                 }
             }
         }

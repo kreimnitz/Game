@@ -19,6 +19,15 @@ namespace Utilities.Model
             return _nodeDictionary.ContainsKey(node.Id);
         }
 
+        public Node GetNode(int id)
+        {
+            if (_nodeDictionary.ContainsKey(id))
+            {
+                return _nodeDictionary[id];
+            }
+            return null;
+        }
+
         public bool ContainsEdge(Edge edge)
         {
             return _edges.Any(e => e.GetHashCode() == edge.GetHashCode());
@@ -70,5 +79,19 @@ namespace Utilities.Model
         public IEnumerable<Node> Nodes => _nodeDictionary.Values;
 
         public IEnumerable<Edge> Edges => _edges;
+
+        public int GetPlayerIncome(int playerNumber)
+        {
+            int income = 0;
+            foreach (var node in Nodes)
+            {
+                var owner = NodeStateUtilities.ToPlayerId(node.State);
+                if (owner == playerNumber)
+                {
+                    income += node.Population;
+                }
+            }
+            return income;
+        }
     }
 }

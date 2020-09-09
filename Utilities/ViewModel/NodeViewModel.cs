@@ -15,9 +15,30 @@ namespace Utilities.ViewModel
         public NodeViewModel(Node node)
         {
             Model = node;
+            Model.PropertyChanged += Model_PropertyChanged;
             FillColor = NodeStateToFillColor(node.State);
             MainLabel = NodeTypeToLabel(node.Type);
-            SubLabel = string.IsNullOrEmpty(MainLabel) ? string.Empty : node.Population.ToString();
+            SubLabel1 = string.IsNullOrEmpty(MainLabel) ? string.Empty : node.DefenseLevel.ToString();
+            SubLabel2 = string.IsNullOrEmpty(MainLabel) ? string.Empty : node.Population.ToString();
+        }
+
+        private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Node.DefenseLevel))
+            {
+                SubLabel1 = Model.DefenseLevel.ToString();
+                RaisePropertyChanged(nameof(SubLabel1));
+            }
+            if (e.PropertyName == nameof(Node.Population))
+            {
+                SubLabel2 = Model.Population.ToString();
+                RaisePropertyChanged(nameof(SubLabel2));
+            }
+            if (e.PropertyName == nameof(Node.State))
+            {
+                FillColor = NodeStateToFillColor(Model.State);
+                RaisePropertyChanged(nameof(FillColor));
+            }
         }
 
         private bool _hovered = false;
@@ -35,7 +56,9 @@ namespace Utilities.ViewModel
 
         public string MainLabel { get; set; } = "";
 
-        public string SubLabel { get; set; } = "";
+        public string SubLabel1 { get; set; } = "";
+
+        public string SubLabel2 { get; set; } = "";
 
         public int Left { get; set; } = 0;
 

@@ -69,5 +69,15 @@ namespace Utilities.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] fortifyCursor {
+            get {
+                object obj = ResourceManager.GetObject("fortifyCursor", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

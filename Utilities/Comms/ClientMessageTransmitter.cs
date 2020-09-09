@@ -42,9 +42,15 @@ namespace Utilities.Comms
             _initialSocket.Close();
         }
 
-        public void SendRequest(Request request)
+        public void SendAttackRequest(AttackNodeRequest request)
         {
-            var message = new Message(MessageType.Request, RequestUtilities.ToByteArray(request));
+            var message = new Message(MessageType.AttackNodeRequest, SerializationUtilities.ToByteArray(request));
+            Message.SendMessage(message, _commsSocket);
+        }
+
+        public void SendFortifyRequest(FortifyNodeRequest request)
+        {
+            var message = new Message(MessageType.FortifyNodeRequest, SerializationUtilities.ToByteArray(request));
             Message.SendMessage(message, _commsSocket);
         }
 
@@ -63,9 +69,9 @@ namespace Utilities.Comms
             {
                 await Task.Delay(1);
                 var message = Message.ReceiveMessage(socket);
-                if (message.MessageType == MessageType.PlayerState)
+                if (message.MessageType == MessageType.GameState)
                 {
-                    var state = GameState.FromByteArray(message.Data);
+                    var state = SerializationUtilities.FromByteArray<GameState>(message.Data);
                     _handler.HandleGameStateMessage(state);
                 }
             }

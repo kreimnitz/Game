@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Utilities.Model
 {
@@ -20,25 +18,6 @@ namespace Utilities.Model
         {
             Player.CopyFrom(state.Player);
             NodeMap.CopyFrom(state.NodeMap);
-        }
-
-        public byte[] ToByteArray()
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            using (var ms = new MemoryStream())
-            {
-                bf.Serialize(ms, this);
-                return ms.ToArray();
-            }
-        }
-
-        public static GameState FromByteArray(byte[] bytes)
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            using (var ms = new MemoryStream(bytes))
-            {
-                return (GameState)bf.Deserialize(ms);
-            }
         }
     }
 }

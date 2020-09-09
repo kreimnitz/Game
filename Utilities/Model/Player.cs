@@ -6,7 +6,12 @@ namespace Utilities.Model
     [Serializable]
     public class Player : IAutoNotifyPropertyChanged
     {
-        public int ID { get; private set; }
+        private int _id;
+        public int ID
+        {
+            get { return _id; }
+            private set { NotifyHelpers.SetProperty(this, ref _id, value); }
+        }
 
         private int _glory;
         public int Glory
@@ -43,8 +48,8 @@ namespace Utilities.Model
             ID = id;
             _glory = glory;
             _income = income;
-            _attackPower = 20;
-            _attackPowerMax = 20;
+            _attackPower = GameConstants.BaseAttackPower;
+            _attackPowerMax = GameConstants.BaseAttackPowerMax;
         }
 
         public void RaisePropertyChanged(string propertyName)
