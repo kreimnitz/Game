@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Glory" 
-        xmlns:utilities="clr-namespace:Utilities.View;assembly=Utilities"
+        xmlns:utilities="clr-namespace:Utilities.View;assembly=Utilities" xmlns:viewmodel="clr-namespace:Utilities.ViewModel;assembly=Utilities"
+        d:DataContext="{d:DesignInstance Type=viewmodel:ClientWindowViewModel}"
         mc:Ignorable="d"
         Title="Minimalist RTS" Height="800" Width="1000">
     <Grid Margin="0,0,2,1" Background="DarkGray">
@@ -39,30 +40,15 @@
                 </StackPanel>
             </Border>
             <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Padding="5">
-                <StackPanel Margin="10, 10, 0, 0" HorizontalAlignment="Left">
-                    <TextBlock HorizontalAlignment="Center" Margin="5">
-                        <Run>Attack Power: </Run>
-                        <Run Text="{Binding Path=PlayerStats.AttackPower, Mode=OneWay}"></Run>
-                    </TextBlock>
-                    <ProgressBar 
-                        Height="20" 
-                        Width="200" 
-                        Minimum="0" 
-                        Value="{Binding Path=PlayerStats.AttackPower, Mode=OneWay}" 
-                        Maximum="{Binding Path=PlayerStats.AttackPowerMax, Mode=OneWay}"
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock HorizontalAlignment="Center" Text="Glory" FontSize="20" FontWeight="Bold" Margin="5"/>
+                    <utilities:RadialMeter
+                        x:Name="_gloryMeter"
+                        Height="150" 
+                        Width="150" 
+                        Value="{Binding Path=PlayerStats.Glory, Mode=OneWay}" 
+                        Maximum="{Binding Path=PlayerStats.GloryMax, Mode=OneWay}"
                         Foreground="{Binding Path=AttackBarBrush, Mode=OneWay}"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="0" Text="0"/>
-                        <TextBlock Grid.Column="2" HorizontalAlignment="Right" Margin="0" Text="{Binding Path=PlayerStats.AttackPowerMax, Mode=OneWay}"/>
-                    </Grid>
                 </StackPanel>
             </Border>
         </StackPanel>

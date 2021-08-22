@@ -8,8 +8,8 @@ namespace Utilities.ViewModel
     public class NodeViewModel : IAutoNotifyPropertyChanged
     {
         public NodeViewModel()
+            : this(new Node())
         {
-            Model = new Node();
         }
 
         public NodeViewModel(Node node)

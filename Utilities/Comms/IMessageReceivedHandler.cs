@@ -11,9 +11,7 @@ namespace Utilities.Comms
 
     public interface IClientMessageRecievedHandler
     {
-        void HandleAttackRequestMessage(AttackNodeRequest request, int playerId);
-
-        void HandleFortifyRequestMessage(FortifyNodeRequest request, int playerId);
+        void HandleNodeUpgradeRequestMessage(NodeUpgradeRequest request, int playerId);
     }
 
     public static class SerializationUtilities

@@ -42,15 +42,9 @@ namespace Utilities.Comms
             _initialSocket.Close();
         }
 
-        public void SendAttackRequest(AttackNodeRequest request)
+        public void SendAttackRequest(NodeUpgradeRequest request)
         {
-            var message = new Message(MessageType.AttackNodeRequest, SerializationUtilities.ToByteArray(request));
-            Message.SendMessage(message, _commsSocket);
-        }
-
-        public void SendFortifyRequest(FortifyNodeRequest request)
-        {
-            var message = new Message(MessageType.FortifyNodeRequest, SerializationUtilities.ToByteArray(request));
+            var message = new Message(MessageType.NodeUpgradeRequest, SerializationUtilities.ToByteArray(request));
             Message.SendMessage(message, _commsSocket);
         }
 

@@ -20,6 +20,13 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _glory, value); }
         }
 
+        private int _gloryMax;
+        public int GloryMax
+        {
+            get { return _gloryMax; }
+            set { NotifyHelpers.SetProperty(this, ref _gloryMax, value); }
+        }
+
         private int _income;
         public int Income
         {
@@ -47,6 +54,7 @@ namespace Utilities.Model
         {
             ID = id;
             _glory = glory;
+            _gloryMax = 1000;
             _income = income;
             _attackPower = GameConstants.BaseAttackPower;
             _attackPowerMax = GameConstants.BaseAttackPowerMax;
@@ -67,6 +75,7 @@ namespace Utilities.Model
             Income = playerStats.Income;
             AttackPower = playerStats.AttackPower;
             AttackPowerMax = playerStats.AttackPowerMax;
+            GloryMax = playerStats.GloryMax;
         }
     }
 }

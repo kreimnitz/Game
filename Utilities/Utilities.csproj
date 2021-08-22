@@ -48,9 +48,12 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="XamlRadialProgressBar.DotNet, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XamlRadialProgressBar.1.0.3\lib\net452\XamlRadialProgressBar.DotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comms\AtttackNodeRequest.cs" />
+    <Compile Include="Comms\NodeUpgradeRequest.cs" />
     <Compile Include="Model\Edge.cs" />
     <Compile Include="Model\GameConstants.cs" />
     <Compile Include="Model\GameState.cs" />
@@ -73,11 +76,15 @@
     <Compile Include="ViewModel\MapChangedEventArgs.cs" />
     <Compile Include="ViewModel\NodeMapViewModel.cs" />
     <Compile Include="ViewModel\NodeViewModel.cs" />
+    <Compile Include="ViewModel\RadialMeterViewModel.cs" />
     <Compile Include="View\NodeView.xaml.cs">
       <DependentUpon>NodeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\NodeMapView.xaml.cs">
       <DependentUpon>NodeMapView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RadialMeter.xaml.cs">
+      <DependentUpon>RadialMeter.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -89,8 +96,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\RadialMeter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +118,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\fortifyCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

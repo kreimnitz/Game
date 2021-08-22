@@ -84,15 +84,10 @@ namespace Utilities.Comms
             {
                 await Task.Delay(1);
                 var message = Message.ReceiveMessage(socket);
-                if (message.MessageType == MessageType.AttackNodeRequest)
+                if (message.MessageType == MessageType.NodeUpgradeRequest)
                 {
-                    var request = SerializationUtilities.FromByteArray<AttackNodeRequest>(message.Data);
-                    _handler.HandleAttackRequestMessage(request, playerNumber);
-                }
-                if (message.MessageType == MessageType.FortifyNodeRequest)
-                {
-                    var request = SerializationUtilities.FromByteArray<FortifyNodeRequest>(message.Data);
-                    _handler.HandleFortifyRequestMessage(request, playerNumber);
+                    var request = SerializationUtilities.FromByteArray<NodeUpgradeRequest>(message.Data);
+                    _handler.HandleNodeUpgradeRequestMessage(request, playerNumber);
                 }
             }
         }
