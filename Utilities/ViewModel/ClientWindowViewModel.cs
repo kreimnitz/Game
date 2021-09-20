@@ -17,8 +17,6 @@ namespace Utilities.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Brush AttackBarBrush => PlayerStats.AttackPower == PlayerStats.AttackPowerMax ? Brushes.Green : Brushes.Red;
-
         public void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -26,7 +24,7 @@ namespace Utilities.ViewModel
 
         public ClientWindowViewModel()
         {
-            PlayerStats = new Player(-1, 0, 0);
+            PlayerStats = new Player(-1, 0, 0, 0);
             
             _messageTransmitter = new ClientMessageTransmitter(this);
             PlayerStats.PropertyChanged += PlayerStats_PropertyChanged;
@@ -34,10 +32,6 @@ namespace Utilities.ViewModel
 
         private void PlayerStats_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Player.AttackPower))
-            {
-                RaisePropertyChanged(nameof(AttackBarBrush));
-            }
         }
 
         public void OnClosed()
@@ -63,21 +57,6 @@ namespace Utilities.ViewModel
             {
                 MapViewModel.Mode = MapInputMode.None;
                 return;
-            }
-
-            if (MapViewModel.Mode == MapInputMode.Attack)
-            {
-                if (MapViewModel.HoveredId != -1)
-                {
-                    _messageTransmitter.SendAttackRequest(new AttackNodeRequest(MapViewModel.HoveredId));
-                }
-            }
-            if (MapViewModel.Mode == MapInputMode.Fortify)
-            {
-                if (MapViewModel.HoveredId != -1)
-                {
-                    _messageTransmitter.SendFortifyRequest(new FortifyNodeRequest(MapViewModel.HoveredId));
-                }
             }
 
             MapViewModel.Mode = MapInputMode.None;

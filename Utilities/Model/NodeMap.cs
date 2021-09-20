@@ -85,10 +85,9 @@ namespace Utilities.Model
             int income = 0;
             foreach (var node in Nodes)
             {
-                var owner = NodeStateUtilities.ToPlayerId(node.State);
-                if (owner == playerNumber)
+                if (node.ControllingPlayer == playerNumber)
                 {
-                    income += node.Population;
+                    income += node.Income;
                 }
             }
             return income;

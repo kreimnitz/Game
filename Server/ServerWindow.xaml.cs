@@ -1,5 +1,4 @@
-﻿using Utilities;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,8 +33,8 @@ namespace Server
             DataContext = this;
             InitializeComponent();
             _messageTransmitter = new ServerMessageTransmitter(this);
-            _player0 = new Player(0, GameConstants.StartingGlory, GameConstants.StartingIncome);
-            _player1 = new Player(1, GameConstants.StartingGlory, GameConstants.StartingIncome);
+            _player0 = new Player(0);
+            _player1 = new Player(1);
             InitializeMap();
             var gloryWindow1 = new Glory.MainWindow();
             gloryWindow1.Show();
@@ -47,7 +46,7 @@ namespace Server
         private void InitializeMap()
         {
             var topBase = new Node(0, new Point(0.5, 0));
-            topBase.State = NodeState.P0Controlled;
+            topBase.ControllingPlayer = 0;
             _nodeMap.AddNode(topBase);
             _nodeMap.AddNode(new Node(1, new Point(0.375, 0.25)));
             _nodeMap.AddNode(new Node(2, new Point(0.625, 0.25)));
@@ -57,7 +56,7 @@ namespace Server
             _nodeMap.AddNode(new Node(6, new Point(0.375, 0.75)));
             _nodeMap.AddNode(new Node(7, new Point(0.625, 0.75)));
             var bottomBase = new Node(8, new Point(0.5, 1));
-            bottomBase.State = NodeState.P1Controlled;
+            bottomBase.ControllingPlayer = 1;
             _nodeMap.AddNode(bottomBase);
 
             _nodeMap.AddEdge(0, 1);
@@ -82,7 +81,7 @@ namespace Server
         }
 
         private async Task WaitForClientAndStartGameAsync()
-        {           
+        {
             await _messageTransmitter.WaitForReady;
             _gameLoopTimer = new Timer(GameConstants.IncomeTimeMs);
             _gameLoopTimer.Elapsed += GameLoop;
@@ -95,16 +94,23 @@ namespace Server
         {
             lock (_modifyModelLock)
             {
+                ApplyNodeIncome();
                 _player0.Income = _nodeMap.GetPlayerIncome(0);
                 _player1.Income = _nodeMap.GetPlayerIncome(1);
 
-                _player0.Glory += _player0.Income;
-                _player1.Glory += _player1.Income;
-                _player0.AttackPower = Math.Min(_player0.AttackPower + GameConstants.BaseAttackRegenRate, _player0.AttackPowerMax);
-                _player1.AttackPower = Math.Min(_player1.AttackPower + GameConstants.BaseAttackRegenRate, _player1.AttackPowerMax);
+                _player0.ApplyIncome();
+                _player1.ApplyIncome();
             }
 
             SendStateMessage();
+        }
+
+        private void ApplyNodeIncome()
+        {
+            foreach (var node in _nodeMap.Nodes)
+            {
+                node.ApplyIncome();
+            }
         }
 
         private void SendStateMessage()
@@ -116,13 +122,16 @@ namespace Server
             }
         }
 
+        public void HandleNodeUpgradeRequestMessage(NodeUpgradeRequest request, int playerId)
+        {
+
+        }
+
         public void HandleAttackRequestMessage(AttackNodeRequest request, int playerId)
         {
             var player = playerId == 0 ? _player0 : _player1;
             var node = _nodeMap.GetNode(request.NodeId);
-            var playerState = playerId == 0 ? NodeState.P0Controlled : NodeState.P1Controlled;
-            var maxAttack = player.AttackPower == player.AttackPowerMax;
-            if (node.State == playerState || player.Glory < GameConstants.AttackGloryCost || !maxAttack)
+            if (node.ControllingPlayer == playerId || player.Glory < GameConstants.AttackGloryCost)
             {
                 return;
             }
@@ -130,17 +139,6 @@ namespace Server
             lock (_modifyModelLock)
             {
                 player.Glory -= GameConstants.AttackGloryCost;
-                if (node.DefenseLevel <= player.AttackPower)
-                {
-                    node.State = playerId == 0 ? NodeState.P0Controlled : NodeState.P1Controlled;
-                    player.AttackPower -= node.DefenseLevel * GameConstants.VictoryAttackLossPercentModifier / 100;
-                    node.DefenseLevel = GameConstants.NodeBaseDefense;
-                }
-                else
-                {
-                    node.DefenseLevel -= player.AttackPower;
-                    player.AttackPower = 0;
-                }
             }
 
 
@@ -150,15 +148,14 @@ namespace Server
         public void HandleFortifyRequestMessage(FortifyNodeRequest request, int playerId)
         {
             var player = playerId == 0 ? _player0 : _player1;
-            var playerState = playerId == 0 ? NodeState.P0Controlled : NodeState.P1Controlled;
             var node = _nodeMap.GetNode(request.NodeId);
-            if (node.State != playerState || player.Glory < GameConstants.FortifyGloryCost)
+            if (node.ControllingPlayer != playerId || player.Glory < GameConstants.FortifyGloryCost)
             {
                 return;
             }
 
             lock (_modifyModelLock)
-            {              
+            {
                 if (player.Glory >= GameConstants.FortifyGloryCost)
                 {
                     player.Glory -= GameConstants.FortifyGloryCost;
@@ -168,5 +165,5 @@ namespace Server
 
             SendStateMessage();
         }
-    }  
+    }
 }

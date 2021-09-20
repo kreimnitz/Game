@@ -34,30 +34,22 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _income, value); }
         }
 
-        private int _attackPower;
-        public int AttackPower
-        {
-            get { return _attackPower; }
-            set { NotifyHelpers.SetProperty(this, ref _attackPower, value); }
-        }
-
-        private int _attackPowerMax;
-        public int AttackPowerMax
-        {
-            get { return _attackPowerMax; }
-            set { NotifyHelpers.SetProperty(this, ref _attackPowerMax, value); }
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Player(int id, int glory, int income)
+        public Player() : this(-1, 0, 0, 0)
+        {
+        }
+
+        public Player(int id) : this(id, GameConstants.StartingGlory, GameConstants.StartingIncome, GameConstants.StartingMaxGlory)
+        {
+        }
+
+        public Player(int id, int glory, int income, int gloryMax)
         {
             ID = id;
             _glory = glory;
-            _gloryMax = 1000;
+            _gloryMax = gloryMax;
             _income = income;
-            _attackPower = GameConstants.BaseAttackPower;
-            _attackPowerMax = GameConstants.BaseAttackPowerMax;
         }
 
         public void RaisePropertyChanged(string propertyName)
@@ -73,9 +65,12 @@ namespace Utilities.Model
             }
             Glory = playerStats.Glory;
             Income = playerStats.Income;
-            AttackPower = playerStats.AttackPower;
-            AttackPowerMax = playerStats.AttackPowerMax;
             GloryMax = playerStats.GloryMax;
+        }
+
+        public void ApplyIncome()
+        {
+            Glory = Math.Min(Glory + Income, GloryMax);
         }
     }
 }

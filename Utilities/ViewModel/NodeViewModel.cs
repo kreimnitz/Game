@@ -16,10 +16,10 @@ namespace Utilities.ViewModel
         {
             Model = node;
             Model.PropertyChanged += Model_PropertyChanged;
-            FillColor = NodeStateToFillColor(node.State);
+            FillColor = NodeStateToFillColor(node);
             MainLabel = NodeTypeToLabel(node.Type);
             SubLabel1 = string.IsNullOrEmpty(MainLabel) ? string.Empty : node.DefenseLevel.ToString();
-            SubLabel2 = string.IsNullOrEmpty(MainLabel) ? string.Empty : node.Population.ToString();
+            SubLabel2 = string.IsNullOrEmpty(MainLabel) ? string.Empty : node.Income.ToString();
         }
 
         private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -29,14 +29,14 @@ namespace Utilities.ViewModel
                 SubLabel1 = Model.DefenseLevel.ToString();
                 RaisePropertyChanged(nameof(SubLabel1));
             }
-            if (e.PropertyName == nameof(Node.Population))
+            if (e.PropertyName == nameof(Node.Income))
             {
-                SubLabel2 = Model.Population.ToString();
+                SubLabel2 = Model.Income.ToString();
                 RaisePropertyChanged(nameof(SubLabel2));
             }
-            if (e.PropertyName == nameof(Node.State))
+            if (e.PropertyName == nameof(Node.ControllingPlayer))
             {
-                FillColor = NodeStateToFillColor(Model.State);
+                FillColor = NodeStateToFillColor(Model);
                 RaisePropertyChanged(nameof(FillColor));
             }
         }
@@ -88,13 +88,13 @@ namespace Utilities.ViewModel
             RaisePropertyChanged(nameof(Top));
         }
 
-        private Brush NodeStateToFillColor(NodeState state)
+        private Brush NodeStateToFillColor(Node node)
         {
-            switch (state)
+            switch (node.ControllingPlayer)
             {
-                case NodeState.P0Controlled:
+                case 0:
                     return Brushes.DarkBlue;
-                case NodeState.P1Controlled:
+                case 1:
                     return Brushes.DarkRed;
                 default:
                     return Brushes.DarkGray;

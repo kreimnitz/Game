@@ -10,6 +10,8 @@ namespace Utilities.Model
     {
         public const int StartingGlory = 100;
 
+        public const int StartingMaxGlory = 1000;
+
         public const int StartingIncome = 10;
 
         public const int IncomeTimeMs = 1000;

@@ -24,11 +24,11 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _id, value); }
         }
 
-        private NodeState _state = NodeState.Neutral;
-        public NodeState State
+        private int _controllingPlayer;
+        public int ControllingPlayer
         {
-            get { return _state; }
-            set { NotifyHelpers.SetProperty(this, ref _state, value); }
+            get { return _controllingPlayer; }
+            set { NotifyHelpers.SetProperty(this, ref _controllingPlayer, value); }
         }
 
         private NodeType _type = NodeType.Village;
@@ -45,6 +45,13 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _position, value); }
         }
 
+        private int _reserve = 0;
+        public int Reserve
+        {
+            get { return _reserve; }
+            set { NotifyHelpers.SetProperty(this, ref _reserve, value); }
+        }
+
         private int _capacity = 100;
         public int Capacity
         {
@@ -59,22 +66,23 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _defenseLevel, value); }
         }
 
-        private int _population = 10;
-        public int Population
+        private int _income = 10;
+        public int Income
         {
-            get { return _population; }
-            set { NotifyHelpers.SetProperty(this, ref _population, value); }
+            get { return _income; }
+            set { NotifyHelpers.SetProperty(this, ref _income, value); }
         }
 
         public void CopyFrom(Node node)
         {
             Id = node.Id;
-            State = node.State;
+            ControllingPlayer = node.ControllingPlayer;
             Type = node.Type;
+            Reserve = node.Reserve;
             Position = node.Position;
             Capacity = node.Capacity;
             DefenseLevel = node.DefenseLevel;
-            Population = node.Population;
+            Income = node.Income;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -82,6 +90,11 @@ namespace Utilities.Model
         public void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void ApplyIncome()
+        {
+            Reserve = Math.Min(Reserve + Income, Capacity);
         }
     }
 
@@ -97,26 +110,5 @@ namespace Utilities.Model
         P0Controlled,
         P1Controlled,
         Neutral
-    }
-
-    public static class NodeStateUtilities
-    {
-        public static NodeState FromPlayerId(int playerId)
-        {
-            return playerId == 0 ? NodeState.P0Controlled : NodeState.P1Controlled;
-        }
-
-        public static int ToPlayerId(NodeState state)
-        {
-            if (state == NodeState.P0Controlled)
-            {
-                return 0;
-            }
-            else if (state == NodeState.P1Controlled)
-            {
-                return 1;
-            }
-            return -1;
-        }
     }
 }
