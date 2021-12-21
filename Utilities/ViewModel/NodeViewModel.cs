@@ -19,7 +19,7 @@ namespace Utilities.ViewModel
             FillColor = NodeStateToFillColor(node);
             MainLabel = NodeTypeToLabel(node.Type);
             SubLabel1 = string.IsNullOrEmpty(MainLabel) ? string.Empty : node.DefenseLevel.ToString();
-            SubLabel2 = string.IsNullOrEmpty(MainLabel) ? string.Empty : node.Income.ToString();
+            SubLabel2 = string.IsNullOrEmpty(MainLabel) ? string.Empty : node.FlatIncome.ToString();
         }
 
         private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -29,9 +29,9 @@ namespace Utilities.ViewModel
                 SubLabel1 = Model.DefenseLevel.ToString();
                 RaisePropertyChanged(nameof(SubLabel1));
             }
-            if (e.PropertyName == nameof(Node.Income))
+            if (e.PropertyName == nameof(Node.FlatIncome))
             {
-                SubLabel2 = Model.Income.ToString();
+                SubLabel2 = Model.FlatIncome.ToString();
                 RaisePropertyChanged(nameof(SubLabel2));
             }
             if (e.PropertyName == nameof(Node.ControllingPlayer))

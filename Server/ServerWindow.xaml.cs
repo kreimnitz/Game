@@ -46,7 +46,7 @@ namespace Server
         private void InitializeMap()
         {
             var topBase = new Node(0, new Point(0.5, 0));
-            topBase.ControllingPlayer = 0;
+            topBase.ControllingPlayer = _player0;
             _nodeMap.AddNode(topBase);
             _nodeMap.AddNode(new Node(1, new Point(0.375, 0.25)));
             _nodeMap.AddNode(new Node(2, new Point(0.625, 0.25)));
@@ -56,7 +56,7 @@ namespace Server
             _nodeMap.AddNode(new Node(6, new Point(0.375, 0.75)));
             _nodeMap.AddNode(new Node(7, new Point(0.625, 0.75)));
             var bottomBase = new Node(8, new Point(0.5, 1));
-            bottomBase.ControllingPlayer = 1;
+            bottomBase.ControllingPlayer = _player1;
             _nodeMap.AddNode(bottomBase);
 
             _nodeMap.AddEdge(0, 1);
@@ -95,8 +95,8 @@ namespace Server
             lock (_modifyModelLock)
             {
                 ApplyNodeIncome();
-                _player0.Income = _nodeMap.GetPlayerIncome(0);
-                _player1.Income = _nodeMap.GetPlayerIncome(1);
+                _player0.IncomeRate = _nodeMap.GetPlayerIncome(0);
+                _player1.IncomeRate = _nodeMap.GetPlayerIncome(1);
 
                 _player0.ApplyIncome();
                 _player1.ApplyIncome();

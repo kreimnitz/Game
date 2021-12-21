@@ -13,8 +13,8 @@ namespace Utilities.Model
             private set { NotifyHelpers.SetProperty(this, ref _id, value); }
         }
 
-        private int _glory;
-        public int Glory
+        private double _glory;
+        public double Glory
         {
             get { return _glory; }
             set { NotifyHelpers.SetProperty(this, ref _glory, value); }
@@ -27,11 +27,11 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _gloryMax, value); }
         }
 
-        private int _income;
-        public int Income
+        private double _incomeRate;
+        public double IncomeRate
         {
-            get { return _income; }
-            set { NotifyHelpers.SetProperty(this, ref _income, value); }
+            get { return _incomeRate; }
+            set { NotifyHelpers.SetProperty(this, ref _incomeRate, value); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -49,7 +49,7 @@ namespace Utilities.Model
             ID = id;
             _glory = glory;
             _gloryMax = gloryMax;
-            _income = income;
+            _incomeRate = income;
         }
 
         public void RaisePropertyChanged(string propertyName)
@@ -64,13 +64,13 @@ namespace Utilities.Model
                 ID = playerStats.ID;
             }
             Glory = playerStats.Glory;
-            Income = playerStats.Income;
+            IncomeRate = playerStats.IncomeRate;
             GloryMax = playerStats.GloryMax;
         }
 
         public void ApplyIncome()
         {
-            Glory = Math.Min(Glory + Income, GloryMax);
+            Glory = Math.Min(Glory + IncomeRate, GloryMax);
         }
     }
 }

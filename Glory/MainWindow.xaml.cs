@@ -42,9 +42,9 @@ namespace Glory
             {
                 _gloryMeterViewModel.Maximum = player.GloryMax;
             }
-            else if (e.PropertyName == nameof(Player.Income))
+            else if (e.PropertyName == nameof(Player.IncomeRate))
             {
-                _gloryMeterViewModel.ValueSubtext = $"+{player.Income}";
+                _gloryMeterViewModel.ValueSubtext = $"+{player.IncomeRate}";
             }
         }
 

@@ -87,7 +87,7 @@ namespace Utilities.Model
             {
                 if (node.ControllingPlayer == playerNumber)
                 {
-                    income += node.Income;
+                    income += node.FlatIncome;
                 }
             }
             return income;

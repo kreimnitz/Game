@@ -24,8 +24,8 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _id, value); }
         }
 
-        private int _controllingPlayer;
-        public int ControllingPlayer
+        private Player _controllingPlayer;
+        public Player ControllingPlayer
         {
             get { return _controllingPlayer; }
             set { NotifyHelpers.SetProperty(this, ref _controllingPlayer, value); }
@@ -45,8 +45,8 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _position, value); }
         }
 
-        private int _reserve = 0;
-        public int Reserve
+        private double _reserve = 0;
+        public double Reserve
         {
             get { return _reserve; }
             set { NotifyHelpers.SetProperty(this, ref _reserve, value); }
@@ -66,11 +66,18 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _defenseLevel, value); }
         }
 
-        private int _income = 10;
-        public int Income
+        private int _flatIncome = 10;
+        public int FlatIncome
         {
-            get { return _income; }
-            set { NotifyHelpers.SetProperty(this, ref _income, value); }
+            get { return _flatIncome; }
+            set { NotifyHelpers.SetProperty(this, ref _flatIncome, value); }
+        }
+
+        private Upgrades _upgrades = 0;
+        public Upgrades Upgrades
+        {
+            get { return _upgrades;  }
+            set { NotifyHelpers.SetProperty(this, ref _upgrades, value); }
         }
 
         public void CopyFrom(Node node)
@@ -82,7 +89,8 @@ namespace Utilities.Model
             Position = node.Position;
             Capacity = node.Capacity;
             DefenseLevel = node.DefenseLevel;
-            Income = node.Income;
+            FlatIncome = node.FlatIncome;
+            Upgrades = node.Upgrades;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -94,7 +102,13 @@ namespace Utilities.Model
 
         public void ApplyIncome()
         {
-            Reserve = Math.Min(Reserve + Income, Capacity);
+            if (ControllingPlayer is null)
+            {
+                return;
+            }
+
+            var income = FlatIncome + ControllingPlayer.IncomeRate * Reserve;
+            Reserve = Math.Min(Reserve + income, Capacity);
         }
     }
 
@@ -103,6 +117,12 @@ namespace Utilities.Model
         Village,
         Monster,
         Vacant
+    }
+
+    [Flags]
+    public enum Upgrades
+    {
+
     }
 
     public enum NodeState
