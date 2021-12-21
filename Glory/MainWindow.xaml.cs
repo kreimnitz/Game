@@ -27,7 +27,7 @@ namespace Glory
             _gloryMeterViewModel = _gloryMeter.ViewModel;
 
             ViewModel.PlayerStats.PropertyChanged += PlayerStats_PropertyChanged;
-            _gloryMeterViewModel.Value = ViewModel.PlayerStats.Glory;
+            _gloryMeterViewModel.Value = (int)ViewModel.PlayerStats.Glory;
             _gloryMeterViewModel.Maximum = ViewModel.PlayerStats.GloryMax;
         }
 
@@ -36,7 +36,7 @@ namespace Glory
             var player = (Player)sender;
             if (e.PropertyName == nameof(Player.Glory))
             {
-                _gloryMeterViewModel.Value = player.Glory;
+                _gloryMeterViewModel.Value = (int)player.Glory;
             }
             else if (e.PropertyName == nameof(Player.GloryMax))
             {

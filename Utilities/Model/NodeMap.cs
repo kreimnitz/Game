@@ -80,12 +80,12 @@ namespace Utilities.Model
 
         public IEnumerable<Edge> Edges => _edges;
 
-        public int GetPlayerIncome(int playerNumber)
+        public int GetPlayerIncome(Player player)
         {
             int income = 0;
             foreach (var node in Nodes)
             {
-                if (node.ControllingPlayer == playerNumber)
+                if (node.ControllingPlayer == player.ID)
                 {
                     income += node.FlatIncome;
                 }

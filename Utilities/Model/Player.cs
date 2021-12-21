@@ -27,7 +27,7 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _gloryMax, value); }
         }
 
-        private double _incomeRate;
+        private double _incomeRate = 0.1;
         public double IncomeRate
         {
             get { return _incomeRate; }

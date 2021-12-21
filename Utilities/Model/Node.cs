@@ -24,8 +24,8 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _id, value); }
         }
 
-        private Player _controllingPlayer;
-        public Player ControllingPlayer
+        private int _controllingPlayer = -1;
+        public int ControllingPlayer
         {
             get { return _controllingPlayer; }
             set { NotifyHelpers.SetProperty(this, ref _controllingPlayer, value); }
@@ -100,14 +100,14 @@ namespace Utilities.Model
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void ApplyIncome()
+        public void ApplyIncome(double incomeRate)
         {
-            if (ControllingPlayer is null)
+            if (ControllingPlayer == -1)
             {
                 return;
             }
 
-            var income = FlatIncome + ControllingPlayer.IncomeRate * Reserve;
+            var income = FlatIncome + incomeRate * Reserve;
             Reserve = Math.Min(Reserve + income, Capacity);
         }
     }
