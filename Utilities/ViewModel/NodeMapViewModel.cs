@@ -152,6 +152,7 @@ namespace Utilities.ViewModel
                 else
                 {
                     var nodeToAdd = new NodeViewModel(node);
+                    nodeToAdd.PlayerId = PlayerId;
                     NodeViewModels.Add(nodeToAdd);
                     addedNodes.Add(nodeToAdd);
                 }
@@ -194,6 +195,8 @@ namespace Utilities.ViewModel
 
             return (addedEdges, removedEdges);
         }
+
+        public int PlayerId { get; set; } = -1;
 
         public void SizedChanged(Size newSize)
         {

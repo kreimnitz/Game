@@ -25,7 +25,7 @@ namespace Utilities.ViewModel
         public ClientWindowViewModel()
         {
             PlayerStats = new Player(-1, 0, 0, 0);
-            
+
             _messageTransmitter = new ClientMessageTransmitter(this);
             PlayerStats.PropertyChanged += PlayerStats_PropertyChanged;
         }
@@ -64,8 +64,13 @@ namespace Utilities.ViewModel
 
         public void HandleGameStateMessage(GameState state)
         {
+            if (MapViewModel.PlayerId == -1)
+            {
+                MapViewModel.PlayerId = state.Player.ID;
+            }
             PlayerStats.CopyFrom(state.Player);
             MapViewModel.CopyToModel(state.NodeMap);
+
 
             Application.Current.Dispatcher.Invoke(delegate
             {

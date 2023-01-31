@@ -66,7 +66,7 @@ namespace Utilities.Model
             set { NotifyHelpers.SetProperty(this, ref _defenseLevel, value); }
         }
 
-        private int _flatIncome = 10;
+        private int _flatIncome = 1;
         public int FlatIncome
         {
             get { return _flatIncome; }

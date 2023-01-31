@@ -39,7 +39,13 @@ namespace Utilities.ViewModel
                 FillColor = NodeStateToFillColor(Model);
                 RaisePropertyChanged(nameof(FillColor));
             }
+            if (e.PropertyName == nameof(Node.Reserve))
+            {
+                RaisePropertyChanged(nameof(ClipRect));
+            }
         }
+
+        public int PlayerId { get; set; } = -1;
 
         private bool _hovered = false;
         public bool Hovered
@@ -70,6 +76,8 @@ namespace Utilities.ViewModel
 
         public int CircleMargin => (Size - InternalCircleSize) / 2;
 
+        public Rect ClipRect => CreateClipRect();
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void RaisePropertyChanged(string propertyName)
@@ -82,7 +90,9 @@ namespace Utilities.ViewModel
             int width = (int)mapSize.Width - Size;
             int height = (int)mapSize.Height - Size;
             Left = (int)(width * Model.Position.X);
-            double yPoint = 1 - Model.Position.Y;
+            double yPoint = PlayerId == 1
+                ? Model.Position.Y
+                : 1 - Model.Position.Y;
             Top = (int)(height * yPoint);
             RaisePropertyChanged(nameof(Left));
             RaisePropertyChanged(nameof(Top));
@@ -98,7 +108,7 @@ namespace Utilities.ViewModel
                     return Brushes.DarkRed;
                 default:
                     return Brushes.DarkGray;
-            }              
+            }
         }
 
         private string NodeTypeToLabel(NodeType type)
@@ -112,6 +122,13 @@ namespace Utilities.ViewModel
                 default:
                     return string.Empty;
             }
+        }
+
+        private Rect CreateClipRect()
+        {
+            var maskRatio = 1 - (Model.Reserve / Model.Capacity);
+            var maskY = InternalCircleSize * maskRatio;
+            return new Rect(0, maskY, InternalCircleSize, InternalCircleSize - maskY);
         }
     }
 }

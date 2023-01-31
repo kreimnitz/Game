@@ -40,16 +40,16 @@ namespace Utilities.Model
         {
         }
 
-        public Player(int id) : this(id, GameConstants.StartingGlory, GameConstants.StartingIncome, GameConstants.StartingMaxGlory)
+        public Player(int id) : this(id, GameConstants.StartingGlory, GameConstants.StartingIncomeRate, GameConstants.StartingMaxGlory)
         {
         }
 
-        public Player(int id, int glory, int income, int gloryMax)
+        public Player(int id, int glory, double incomeRate, int gloryMax)
         {
             ID = id;
             _glory = glory;
             _gloryMax = gloryMax;
-            _incomeRate = income;
+            _incomeRate = incomeRate;
         }
 
         public void RaisePropertyChanged(string propertyName)

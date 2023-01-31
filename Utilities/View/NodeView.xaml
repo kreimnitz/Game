@@ -20,8 +20,12 @@
             Margin="{Binding Path=CircleMargin, Mode=OneWay}" 
             Width="{Binding Path=InternalCircleSize, Mode=OneWay}" 
             Height="{Binding Path=InternalCircleSize, Mode=OneWay}" 
-            Fill="{Binding Path=FillColor, Mode=OneWay}"/>
-        <Grid Width="{Binding ActualWidth, ElementName=ParentCanvas}" Height="{Binding ActualHeight, ElementName=ParentCanvas}">
+            Fill="{Binding Path=FillColor, Mode=OneWay}">
+          <Ellipse.Clip>
+            <RectangleGeometry Rect="{Binding Path=ClipRect, Mode=OneWay}"/>
+          </Ellipse.Clip>
+        </Ellipse>  
+    <Grid Width="{Binding ActualWidth, ElementName=ParentCanvas}" Height="{Binding ActualHeight, ElementName=ParentCanvas}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock                
                     HorizontalAlignment="Center"

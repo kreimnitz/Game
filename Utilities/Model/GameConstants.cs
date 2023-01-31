@@ -12,9 +12,9 @@ namespace Utilities.Model
 
         public const int StartingMaxGlory = 1000;
 
-        public const int StartingIncome = 10;
+        public const double StartingIncomeRate = 0.05;
 
-        public const int IncomeTimeMs = 1000;
+        public const int IncomeTimeMs = 2000;
 
         public const int AttackGloryCost = 100;
 
